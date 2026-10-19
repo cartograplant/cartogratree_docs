@@ -31,7 +31,7 @@ You can also contribute to TreeSnap by downloading the app and submitting pictur
 
 Select and filter plants
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Users can select from the left pane the plants to be included in an analysis. Cartograplant has tens of thousands of plants, and it will only continue to grow. To only look at the plants of interest to you, you can filter the plants on the map by taxonomy, publication, genotype, and/or phenotype.
+Users can select plants to be included in an analysis from the left pane . Cartograplant has tens of thousands of plants, and it will only continue to grow. To only look at the plants of interest to you, you can filter the plants on the map by taxonomy, publication, genotype, and/or phenotype.
 
 If you want to narrow your search even further, you can make use of the combination filters offered by the AND/OR switches and the ADD RULE and ADD GROUP buttons. Resetting the filter removes all currently active filters and shows all plants available on the map again.
 
@@ -132,15 +132,15 @@ Running an Analysis
 
 2. Navigate to `CartograPlant <https://treegenesdb.org/Cartograplant>`_ and select the plants you want to include in the analysis. Users can select plants by using the polygon tool (top figure) or by adding all or a subset of plants related to a particular accession from the Accession Summary (bottom figure).
 
-.. image:: ../images/cp_select_plants_from_accession_summary.png
-    :width: 600px
-    :align: center
-    :alt: Select plants from accession summary
-
 .. image:: ../images/cp_select_plants_with_polygon.png
     :width: 600px
     :align: center
     :alt: Select plants using the polygon tool
+
+.. image:: ../images/cp_select_plants_from_accession_summary.png
+    :width: 600px
+    :align: center
+    :alt: Select plants from accession summary
 
 
 3. Click on **Analyze** at the top panel.
@@ -221,7 +221,7 @@ In the **Select environmental metrics** tab, you can:
     
     </video>
 
-In the **Conduct analysis** tab, provide a vcf and/or environmental file(s) generated from the **Select environmental metrics** tab or **Select Traits** tab to perform either genotype-phenotype or genotype-environment association analysis. Users can conduct genotype-phenotype analysis with two models from the `GEMMA software <https://github.com/genetics-statistics/GEMMA>`_  a linear model, or a univariate linear mixed model. Users can conduct genotype-environment analysis using latent factor mixed models (LFMM) from the `LEA R package <https://www.bioconductor.org/packages/devel/bioc/vignettes/LEA/inst/doc/LEA.pdf>`_.” 
+In the **Conduct analysis** tab, provide a vcf and/or environmental file(s) generated from the **Select environmental metrics** tab or **Select Traits** tab to perform either genotype-phenotype or genotype-environment association analysis. Users can conduct genotype-phenotype analysis with two models from the `GEMMA software: <https://github.com/genetics-statistics/GEMMA>`_  a linear model, or a univariate linear mixed model. Users can conduct genotype-environment analysis using latent factor mixed models (LFMM) from the `LEA R package <https://www.bioconductor.org/packages/devel/bioc/vignettes/LEA/inst/doc/LEA.pdf>`_.” 
     
 
 .. figure:: _static/NATC-gemmalm.png
