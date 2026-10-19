@@ -17,7 +17,7 @@ Basic User Interface
 Select dataset sources to include
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Cartograplant enables the analysis of plants from three data sources: Internal submissions, TreeGenes, Direct Submissions, TreeSnap, BIEN, Evome, MAMA EAB and WFID. The user can choose which plants from which datasets they want on the map, or any combination of them. When applying filters only plants from selected datasets are effected.
+Cartograplant enables the analysis of plants from multiple data sources: Internal submissions, TreeGenes, Direct Submissions, TreeSnap, BIEN, Evome, MAMA EAB and WFID. The user can choose which plants from which datasets they want on the map, or any combination of them. When applying filters, only plants from selected datasets are effected.
 
 To contribute and submit your own data for TreeGenes, you can use TPPS: https://treegenesdb.org/tpps. 
 This is a module that streamlines the submission process for plant related studies.
@@ -33,7 +33,7 @@ Select and filter plants
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Users can select from the left pane the plants to be included in an analysis. Cartograplant has tens of thousands of plants, and it will only continue to grow. To only look at the plants of interest to you, you can filter the plants on the map by taxonomy, publication, genotype, and/or phenotype.
 
-If you want to narrow your search even more, you can make use of the combination filters offered by making use of the AND/OR switches and the ADD RULE and ADD GROUP buttons. Resetting the filter removes all the currently active filters and shows all plants available on the map again.
+If you want to narrow your search even further, you can make use of the combination filters offered by the AND/OR switches and the ADD RULE and ADD GROUP buttons. Resetting the filter removes all currently active filters and shows all plants available on the map again.
 
 .. image:: ../images/cp_filter_plants.png
     :align: center
@@ -62,28 +62,28 @@ https://treegenesdb.org/Cartograplant?species=Abies%20alba
 
 Select environmental data
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Users can also select from the left pane, the environmental values to be included in an analysis, by turning environmental layers on or off. The environmental layers are layered on top of each other, with the latest layer placed on top of previously selected layers. Clicking on any random point on the map with at least one active layer will show the environmental values for that location.
+Users can also select the environmental values to be included in an analysis from the left pane by turning environmental layers on or off. The environmental layers are overlaid on top of each other, with the latest layer placed on top of previously selected layers. Clicking on any point on the map with at least one active layer will show the environmental values for that location.
 
 .. image:: ../images/cp_env_layers.png
     :align: center
     :alt: Layers Panel of Cartograplant 
 
-Some enviornmental layers contain additional filters which will also be seen under the on/off toggle button. For example, range maps may have color options that allow you to color each range map with a different color as a way to differentiate between multiple selected layers. Some environmental layers contain a year range slider filter which allows you to filter between a starting year and ending year. For those that can filter by year, you will see a range slider in which the left select represents the starting year and while the right select represents the ending year. Adjusting these filters will filter the data in realtime.
+Some enviornmental layers contain additional filters which will also be seen under the on/off toggle button. For example, range maps may have color options that allow you to color each range map as a way to differentiate between multiple selected layers. Some environmental layers contain a year range slider filter which allows you to filter between a starting year and ending year. For those that can filter by year, you will see a range slider in which the left select represents the starting year and the right select represents the ending year. Adjusting these sliders will filter the data in realtime.
 
 Get location information
 ^^^^^^^^^^^^^^^^^^^^^^^^
-Users can display the values at a particular location on the map, by clicking on the map at that location. The pop-up window, will display the plants present at that location (if there are any), and the values from the environmental layers selected.
+Users can display the values at a particular location on the map by clicking on the map at that location. The pop-up window will display the plants present at that location, if there are any, and the values from the environmental layers selected.
 
 .. image:: ../images/cp_click_env.png
     :width: 600px
     :align: center
     :alt: Details for a specific location on the map
 
-At zoomed out levels the plants are clustered and are represented by circles. The color and size of the circle indicates how many plants there are in the cluster. The user can click on a cluster to zoom in and view the individual plants.
+When zoomed out, the plants are clustered and represented by circles. The color and size of the circle indicates how many plants there are in the cluster. The user can click on a cluster to zoom in and view the individual plants.
 
 Navigation Controls
 ^^^^^^^^^^^^^^^^^^^
-You can use arrow keys to move across the zoom, and the scroll wheel to zoom in. Double clicking on any point in the map will also zoom you in. There also exists navigation controls at the top right of the map which gives you control of the zoom level, the bearing and the pitch of the map.
+You can use arrow keys to move across the map, and the scroll wheel to zoom in. Double clicking on any point in the map will also zoom you in. Alternatively, there are navigation controls at the top right of the map which gives you control of the zoom level, the bearing, and the pitch of the map.
 
 Analysis Panel
 ==============
