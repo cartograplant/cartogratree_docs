@@ -1,0 +1,2108 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6. Developer Documentation &mdash; cartogratree 7.x-0.1-dev documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=779bd379"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="4. Users" href="user.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cartogratree
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html">2. Administrators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="admin.html#database-setup">3. Database setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">4. Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html#analysis-panel">5. Analysis Panel</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Developer Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#about">6.1. About</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-style-specifications">6.2. Coding style specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-structure">6.3. Project Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mapbox">6.4. Mapbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#treesnap">6.5. TreeSnap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bien">6.6. BIEN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-new-tree-dataset-source">6.7. Adding a new Tree Dataset source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-geoserver-tileset-layers">6.8. Adding Geoserver Tileset layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customizing-icons-on-the-map-that-represent-the-points">6.9. Customizing icons on the map that represent the points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filtering-using-a-query-builder">6.10. Filtering using a Query Builder</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing">6.10.1. Parsing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-nodejs-api">6.11. Updating the NodeJS API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extracting-tree-data">6.12. Extracting tree data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extracting-layer-data">6.13. Extracting layer data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-and-removing-layers-from-the-map">6.14. Adding and Removing layers from the map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-layer-filters-for-environmental-layers">6.15. Adding layer filters for environmental layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-layer-legend-box-html">6.16. Adding layer legend box HTML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-to-analysis-panels">6.17. Contributing To Analysis Panels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-analysis-tables-and-passing-to-sambada">6.18. Generating analysis tables and passing to Sambada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-and-loading-sessions">6.19. Saving and loading sessions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#cartograplant-api-reference">7. Cartograplant API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">7.1. CONFIGURATION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admin-api-functions">7.2. ADMIN API FUNCTIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remove-treegenes-trees">7.3. REMOVE TREEGENES TREES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trees-reload">7.4. TREES RELOAD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trees-reload-status">7.5. TREES RELOAD STATUS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cache-clear">7.6. CACHE CLEAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#consolidate-dryad-trees-from-treegenes">7.7. CONSOLIDATE DRYAD TREES FROM TREEGENES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#consolidate-treesnap-subkingdoms">7.8. CONSOLIDATE TREESNAP SUBKINGDOMS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#consolidate-treesnap-families">7.9. CONSOLIDATE TREESNAP FAMILIES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reload-treesnap">7.10. RELOAD TREESNAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#force-reload-treesnap">7.11. FORCE RELOAD TREESNAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#force-reload-bienv4-trees">7.12. FORCE RELOAD BIENv4 TREES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#force-reload-bienv4-endangered-taxa">7.13. FORCE RELOAD BIENv4 ENDANGERED TAXA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normal-user-api-functions">7.14. NORMAL USER API FUNCTIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-trees">7.15. GET TREES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-response">7.15.1. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#response-fields">7.15.2. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-trees-based-on-query">7.16. GET TREES BASED ON QUERY</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-post-request-using-ajax">7.16.1. Example POST request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">7.16.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">7.16.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-trees-based-on-source">7.17. GET TREES BASED ON SOURCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-get-request">7.17.1. Example GET request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">7.17.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">7.17.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-basic-information">7.18. GET TREE BASIC INFORMATION</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-get-request-using-ajax">7.18.1. Example GET request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">7.18.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">7.18.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-phenotypes">7.19. GET TREE PHENOTYPES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">7.19.1. Example GET request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">7.19.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">7.19.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-genotypes">7.20. GET TREE GENOTYPES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id10">7.20.1. Example GET request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">7.20.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">7.20.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-markers">7.21. GET TREE MARKERS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">7.21.1. Example GET request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">7.21.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">7.21.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-publications">7.22. GET TREE PUBLICATIONS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">7.22.1. Example GET request using ajax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">7.22.2. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">7.22.3. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-tree-treesnap-complete">7.23. GET TREE TREESNAP COMPLETE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">7.23.1. Example GET request using ajax</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-session-data">7.24. GET SESSION DATA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id20">7.24.1. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">7.24.2. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-user-session">7.25. GET USER SESSION</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id22">7.25.1. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">7.25.2. Response Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-all-user-sessions">7.26. GET ALL USER SESSIONS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">7.26.1. Example Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">7.26.2. Response Fields</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cartogratree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">6. </span>Developer Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dev.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-documentation">
+<h1><span class="section-number">6. </span>Developer Documentation<a class="headerlink" href="#developer-documentation" title="Link to this heading"></a></h1>
+<section id="about">
+<h2><span class="section-number">6.1. </span>About<a class="headerlink" href="#about" title="Link to this heading"></a></h2>
+<p>Cartograplant was built with CSS3, HTML5, JavaScript, PHP 7.0.29, and PSQL 9.2.15. The libraries and frameworks used include: Mapbox GL JS 1.0.0, Bootstrap 4.0.0, and JQuery 2.2.4. You should also be familiar with Git to commit and push changes. Understanding Mapbox and Drupal is a good starting point before diving deep into the project.</p>
+<p>If you want to read about the motivations and future plans for the project read this paper: <a class="reference external" href="https://docs.google.com/document/d/1y4-KwPzZfSC6bzHZlhFI627cLPwfz0H3ogZUb_XQeMs">https://docs.google.com/document/d/1y4-KwPzZfSC6bzHZlhFI627cLPwfz0H3ogZUb_XQeMs</a></p>
+<p>Before anything else, make sure you have sudo access in the server where Cartograplant is running and admin privileges in the Drupal website where Cartograplant is being developed. Although not required these extra privileges will make development much easier.
+You should have a GitLab account to be able to contribute to the codebase, Geoserver and Mapbox accounts to view the layers, a TreeSnap account with a valid API key to request TreeSnap data, and an account in the Drupal website where Cartograplant is installed to be able to log in and test the changes.</p>
+</section>
+<section id="coding-style-specifications">
+<h2><span class="section-number">6.2. </span>Coding style specifications<a class="headerlink" href="#coding-style-specifications" title="Link to this heading"></a></h2>
+<p>It helps to maintain consistency in code to make maintainability of the codebase much easier. Some coding guidelines for developing Cartograplant:</p>
+<ul class="simple">
+<li><p>Tabs are 4 spaces, indent using tabs not spaces</p></li>
+<li><p>Starting curly brace should be in the same line, while ending curly brace in their own line</p></li>
+<li><p>Don’t add in-line comments for the sake of adding comments, only do so if an explanation is necessary. The names of functions or variables should be enough in some cases, if they were named appropriately.</p></li>
+<li><p>HTML ids and classes delimited by ‘-’</p></li>
+<li><p>In PHP only use single quotes unless necessary</p></li>
+<li><p>Try to use Tripal API functions instead of Drupal ones</p></li>
+<li><p>In JavaScript single and double quotes are interchangeable, but try to keep it consistent</p></li>
+<li><p>Only use ternary operators if it could fit in a single line or less</p></li>
+<li><p>Class names should be capitalized</p></li>
+<li><dl class="simple">
+<dt>Variables</dt><dd><ul>
+<li><p>Should describe what the variable is</p></li>
+<li><p>No one letter variable names unless used for loops or temporary variables</p></li>
+<li><p>Should be short and sweet</p></li>
+<li><p>For PHP and NodeJS we use underscore, and for front-end JavaScript we use camelCase</p></li>
+<li><p>Try to avoid using global variables</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Functions</dt><dd><ul>
+<li><p>Don’t repeat yourself</p></li>
+<li><p>Don’t make functions too long</p></li>
+<li><p>Ideally a function should only do one thing</p></li>
+<li><p>Try to be as descriptive in the name as possible, but not too long that it becomes a pain to type or refer back to</p></li>
+<li><p>For PHP and NodeJS we use underscore, and for front-end JavaScript we use camelCase</p></li>
+<li><p>Minimize vertical distance for functions such that functions that use each other are close to each other in the top-down view of the program</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Any tokens or API keys should not be exposed to the public and ideally should be stored in a configuration file or as environmental variables</p></li>
+</ul>
+</section>
+<section id="project-structure">
+<h2><span class="section-number">6.3. </span>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
+<div class="highlight-CSS notranslate"><div class="highlight"><pre><span></span><span class="nt">-</span><span class="w"> </span><span class="nt">drupal_module</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant</span><span class="p">.</span><span class="nc">info</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant</span><span class="p">.</span><span class="nc">install</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">js</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">main</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">map</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">styling</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">main</span><span class="p">.</span><span class="nc">css</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">includes</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant_admin_get_environmental_values</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant</span><span class="p">.</span><span class="nc">admin</span><span class="p">.</span><span class="nc">inc</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant</span><span class="p">.</span><span class="nc">user</span><span class="p">.</span><span class="nc">inc</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">theme</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">templates</span>
+<span class="w">            </span><span class="nt">-</span><span class="w"> </span><span class="nt">page--Cartograplant</span><span class="p">.</span><span class="nc">tpl</span><span class="p">.</span><span class="nc">php</span>
+<span class="w">            </span><span class="nt">-</span><span class="w"> </span><span class="nt">resources_imgs</span>
+<span class="w">            </span><span class="nt">-</span><span class="w"> </span><span class="nt">trees_imgs</span>
+<span class="w">            </span><span class="nt">-</span><span class="w"> </span><span class="nt">ui_icons_imgs</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant_theme</span><span class="p">.</span><span class="nc">inc</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant</span><span class="p">.</span><span class="nc">module</span>
+<span class="nt">-</span><span class="w"> </span><span class="nt">NodeJSAPI</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">Cartograplant_api</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">query</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">routes</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">controllers</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">treeController</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">userController</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">        </span><span class="nt">-</span><span class="w"> </span><span class="nt">oldController</span><span class="p">.</span><span class="nc">js</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">package</span><span class="p">.</span><span class="nc">json</span>
+<span class="w">    </span><span class="nt">-</span><span class="w"> </span><span class="nt">README</span><span class="p">.</span><span class="nc">md</span>
+<span class="nt">-</span><span class="w"> </span><span class="nt">galaxy_workflows</span>
+<span class="nt">-</span><span class="w"> </span><span class="nt">LICENSE</span>
+<span class="nt">-</span><span class="w"> </span><span class="nt">README</span><span class="p">.</span><span class="nc">md</span>
+<span class="nt">-</span><span class="w"> </span><span class="nt">CHANGELOG</span><span class="p">.</span><span class="nc">md</span>
+</pre></div>
+</div>
+<p>The Cartograplant–page.tpl.php contains the basic HTML layout of the page.
+The map.js file contains the majority of the code for controlling the map and any map interactions.
+The Cartograplant.module is the heart of the Drupal program and controls what happens on page load.</p>
+<p>Modifying any changes to the files will usually allow you to view the effects on refresh of the page, but in the event it doesn’t try clearing the cache by typing the following command in the terminal:</p>
+<div class="highlight-HTML notranslate"><div class="highlight"><pre><span></span>drush cc all
+</pre></div>
+</div>
+</section>
+<section id="mapbox">
+<h2><span class="section-number">6.4. </span>Mapbox<a class="headerlink" href="#mapbox" title="Link to this heading"></a></h2>
+<p>Mapbox is a platform for hosting and editing map styles. It also offers libraries and frameworks for creating web-based mapping applications. Cartograplant uses Mapbox GL JS to display its base map and serve some of its layers.
+Cartograplant’s base map along with the composited layers can be found here: <a class="reference external" href="https://api.mapbox.com/styles/v1/snkb/cjrgce15209bi2spi9f2ddvch.html?fresh=true&amp;title=true&amp;access_token=pk.eyJ1Ijoic25rYiIsImEiOiJjanFtZXpkbmkzc2cyM3hsYjJ3dDhtYnp5In0.suo54ZuchrNHspBirQ8drA#4.05/40.54/-96.66">https://api.mapbox.com/styles/v1/snkb/cjrgce15209bi2spi9f2ddvch.html?fresh=true&amp;title=true&amp;access_token=pk.eyJ1Ijoic25rYiIsImEiOiJjanFtZXpkbmkzc2cyM3hsYjJ3dDhtYnp5In0.suo54ZuchrNHspBirQ8drA#4.05/40.54/-96.66</a></p>
+<p>In case you’re stuck on something Mapbox related a good place to start is the documentation, which you can find here: <a class="reference external" href="https://docs.mapbox.com/mapbox-gl-js/api/">https://docs.mapbox.com/mapbox-gl-js/api/</a></p>
+</section>
+<section id="treesnap">
+<h2><span class="section-number">6.5. </span>TreeSnap<a class="headerlink" href="#treesnap" title="Link to this heading"></a></h2>
+<p>Cartograplant works in collaboration with TreeSnap and their mobile application which relies on citizen scientists to submit trees they encounter in nature. To use the TreeSnap API you must first create a TreeSnap account and get a bearer token which will be used to authenticate API requests.
+Create a TreeSnap account then go to <a class="reference external" href="https://treesnap.org/developer">https://treesnap.org/developer</a> to generate your tokens for use.
+Documentation for the TreeSnap API and what data you can request can be found at: <a class="reference external" href="https://github.com/statonlab/Treesnap-website/wiki/Observations-Web-Service">https://github.com/statonlab/Treesnap-website/wiki/Observations-Web-Service</a></p>
+</section>
+<section id="bien">
+<h2><span class="section-number">6.6. </span>BIEN<a class="headerlink" href="#bien" title="Link to this heading"></a></h2>
+<p>Cartograplant also works in collaboration with the Botanical Information and Ecology Network’s dataset. The BIEN working group has been working since 2008 toward bringing together disparate networks of botanical researchers and integrating global botanical observation data. This observational data is pulled into Cartograplant for further research and analysis. Please have a look at Cartograplant’s API function list for more information on related BIENv4 features.
+Currently Cartograplant supports two main observation sub datasets from BIENv4 - tree observations and endangered taxa.</p>
+</section>
+<section id="adding-a-new-tree-dataset-source">
+<h2><span class="section-number">6.7. </span>Adding a new Tree Dataset source<a class="headerlink" href="#adding-a-new-tree-dataset-source" title="Link to this heading"></a></h2>
+<p>The tree dataset sources on the map are loaded as GeoJSON files received from an API endpoint. GeoJSON is a format for encoding a variety of geographic data structures. The GeoJSON returned must be a list of features with valid longitude and latitude coordinates and a unique id.
+All of the trees are stored in a single table where each record has a &lt;source_id&gt; column.
+Cartograplant currently supports three sources, where TreeGenes = 0, TreeSnap = 1, DataDryad = 2 and BIEN = 3 for source ids. Currently the dataset layer, which encompasses the three sources mentioned beforehand, is composed of three layers.
+The first layer, which is the outermost layer, is the cluster text layer. This displays how many trees there are in this cluster. The 2nd top most level layer is the cluster layer itself, which is just a circle symbol on the map with varying sizes and colors. The last layer is for the individual points which are represented by tree icons and only appear when the user is zoomed in.</p>
+<p>An example GeoJSON feature collection array</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0001&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8377888</span><span class="p">,</span><span class="mf">45.9715095</span><span class="p">]}},</span>
+<span class="w">        </span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0002&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8380944</span><span class="p">,</span><span class="mf">45.9715108</span><span class="p">]}}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The &lt;id&gt; in the properties object identifies a single tree.
+The &lt;icon_type&gt; property signifies which icon the tree will have displayed on the map to represent it. Currently there are six icon types, where exact/approximate refers to the confidence level of the location of the tree.</p>
+<div class="highlight-HTML notranslate"><div class="highlight"><pre><span></span>0 = Angiosperm exact
+1 = Gymnosperm exact
+2 = Angiosperm approximate
+3 = Gymnosperm approximate
+4 = TreeSnap angiosperm
+5 = TreeSnap gymnosperm
+</pre></div>
+</div>
+<p>To read more about GeoJSON and how to optimize it for large datasets: <a class="reference external" href="https://docs.mapbox.com/help/troubleshooting/working-with-large-geojson-data/">https://docs.mapbox.com/help/troubleshooting/working-with-large-geojson-data/</a></p>
+</section>
+<section id="adding-geoserver-tileset-layers">
+<h2><span class="section-number">6.8. </span>Adding Geoserver Tileset layers<a class="headerlink" href="#adding-geoserver-tileset-layers" title="Link to this heading"></a></h2>
+<p>Our latest version of Cartograplant uses a mixture of both geoJSON layers and Geoserver tileset layers to display datasets. For example, the new BIEN layer is a Geoserver tileset layer.
+In order to add Geoserver tileset layers, it is important to name it and also append ‘_geoserver_tileset’ within the Javascript code particularly for the global
+variable datasetKey which holds the corresponding source_ids of each layer and the datasetGeoserverLayerConfig which holds the raw Geoserver layer name for the dataset
+and other required settings. It is also important to edit the theme file page–Cartograplant.tpl.php which contains the dataset toggle buttons and set an id for the new
+dataset in the form of &lt;name&gt;_geoserver_tileset-data.</p>
+</section>
+<section id="customizing-icons-on-the-map-that-represent-the-points">
+<h2><span class="section-number">6.9. </span>Customizing icons on the map that represent the points<a class="headerlink" href="#customizing-icons-on-the-map-that-represent-the-points" title="Link to this heading"></a></h2>
+<p>The different icon_types differentiate between approximate and exact coordinates of the georeferenced trees, the plant group that the tree belongs to, as well as the data source.
+TreeSnap’s trees implement some sort of coordinate obsfucation as some of the trees recorded are on private property.</p>
+<p>To add your own icons, first the icons must be chosen. You can either choose from some of mapbox’s <a class="reference external" href="https://labs.mapbox.com/maki-icons/">icons</a> and add them to your base map using mapbox studio, or add your own images to the project directory and linking them yourself.</p>
+<p>Adding your own icons to mapbox</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">map</span><span class="p">.</span><span class="nx">loadImage</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">image_path</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">image_var_name</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">map</span><span class="p">.</span><span class="nx">addImage</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">image_name_to_reference</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">image_var_name</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>To match the trees with their icon a mapbox matching expression is used.</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;match&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">[</span><span class="s2">&quot;get&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">icon_property_name</span><span class="o">&gt;</span><span class="p">],</span>
+<span class="w">    </span><span class="o">&lt;</span><span class="nx">icon_property_value</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&lt;</span><span class="nx">image_name_to_reference</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&lt;</span><span class="nx">icon_property_value</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&lt;</span><span class="nx">image_name_to_reference_2</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="o">&lt;</span><span class="nx">default_image_name_to_reference</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">];</span>
+</pre></div>
+</div>
+<p>If keeping the trees intact, then you can simply replace the images located in the <code class="code docutils literal notranslate"><span class="pre">theme/templates/trees_imgs</span></code> directory with your new tree images.</p>
+</section>
+<section id="filtering-using-a-query-builder">
+<h2><span class="section-number">6.10. </span>Filtering using a Query Builder<a class="headerlink" href="#filtering-using-a-query-builder" title="Link to this heading"></a></h2>
+<p>The main.js file located in the /js directory contains the starter code for the filter options available to the user. The ruleBasic variable below indicates what is the first filter option shown to the user on load.
+The &lt;condition&gt; denotes the starting selected condition for this query. The &lt;condition&gt; parameter can either be ‘AND’ or ‘OR’.</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">rulesBasic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">condition</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;AND&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">rules</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;family&#39;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nx">operator</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;equal&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">    </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>The filtersList variable contains all of the filters declared and that are available to the user right now. Each filter is composed of several properties. The &lt;id&gt; indicates the field of the selection and must be unique, the &lt;label&gt; is the name shown to the user, &lt;input&gt; is the type of form being used.
+The &lt;values&gt; is the available options for this select dropdown, it’s composed of key/value pairs. This is dynamically populated on page load. The &lt;operators&gt; is the array of clauses that is available for this option.</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">filtersList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;family&#39;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Family&#39;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nx">input</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;select&#39;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">                    </span><span class="nx">operators</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;not_equal&#39;</span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>To get the filters chosen by the user we select the element that contains the filter form and call the queryBuilder function: $(‘#builder’).queryBuilder(‘getRules’);
+This returns a json object, which we pass to the API and the API parses it, generates a sql query, then returns back the result of the query.</p>
+<p>An example json that can result from a filter selection</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;condition&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;rules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;family&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;field&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;family&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;input&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Pinaceae&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;condition&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;rules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;genus&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;field&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;genus&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;input&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Pinus&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;marker_type&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;field&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;marker_type&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;input&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SNP&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="parsing">
+<h3><span class="section-number">6.10.1. </span>Parsing<a class="headerlink" href="#parsing" title="Link to this heading"></a></h3>
+<p>The filters chosen by the user can be as deep as the user wants, so a recursive function that simulates a depth first search approach is used to parse the resulting json object. We go through each filter, and if we encounter a filter that is an object we go one level deeper. We use paranthesis to separate between groups of filters.</p>
+<p>The resulting query from the example json above would look like:</p>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">some_table</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="p">(</span><span class="n">family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Pinaceae&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">genus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Pinus&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">marker_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SNP&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="updating-the-nodejs-api">
+<h2><span class="section-number">6.11. </span>Updating the NodeJS API<a class="headerlink" href="#updating-the-nodejs-api" title="Link to this heading"></a></h2>
+<p>The NodeJS express API is composed of four major parts. The Cartograplant_api.js is the main file, declares the necessary dependency modules and starts everything. Then there’s the routes.js file which defines all the current available API endpoints. Adding a new endpoint is fairly trivial. Then there’s the query.js file which defines the connection to the database and what gives the API access and ability to get data from the tables.</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">app</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">operation</span><span class="o">&gt;</span><span class="p">(</span><span class="s1">&#39;/Cartograplant/api/&lt;version&gt;/&lt;path&gt;&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">controller</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">function_name</span><span class="o">&gt;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here the &lt;operation&gt; refers to GET, POST, PUT, etc operations. The &lt;version&gt; refers to the API’s current version, right now Cartograplant is at version 2. This version number should remain a whole number just by convention.</p>
+<p>Lastly, there are the controllers which receive the requests handled by the routes. The controllers must be first imported into the routes.js file to be able to refer to them.
+The general format for a controller function that handles an API call is:</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">exports</span><span class="p">.</span><span class="o">&lt;</span><span class="nx">function_name</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="nx">stuff</span>
+<span class="w">    </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">status_code</span><span class="o">&gt;</span><span class="p">).</span><span class="nx">json</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">some_result</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To see your changes take effect, you need to restart the API.
+If using systemd to manage the api:</p>
+<p>The command: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">restart</span> <span class="pre">Cartograplant_api</span></code> restarts the API.</p>
+<p>To see the current status of the API do: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">status</span> <span class="pre">Cartograplant_api</span></code></p>
+<p>If you are using the <code class="code docutils literal notranslate"><span class="pre">node</span></code> command:</p>
+<p>The command: <code class="code docutils literal notranslate"><span class="pre">node</span> <span class="pre">Cartograplant_api</span> <span class="pre">&amp;</span></code> will start the server for the API in the background</p>
+<p>To stop it: Find the process id of the the program  using <code class="code docutils literal notranslate"><span class="pre">ps</span> <span class="pre">aux</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">node</span></code> and kill it using <code class="code docutils literal notranslate"><span class="pre">kill</span> <span class="pre">-9</span> <span class="pre">&lt;node_process_id&gt;</span></code></p>
+<p>Using <code class="code docutils literal notranslate"><span class="pre">node</span></code> to run the server is recommended as it allows you to see a more detailed error message.</p>
+<p>To view debugging output: <code class="code docutils literal notranslate"><span class="pre">node</span> <span class="pre">Cartograplant_api</span></code> on the console.</p>
+</section>
+<section id="extracting-tree-data">
+<h2><span class="section-number">6.12. </span>Extracting tree data<a class="headerlink" href="#extracting-tree-data" title="Link to this heading"></a></h2>
+<p>When a user clicks on a point, we can grab the features within that click point.</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">map</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//create a bounding box around the clicked point, to be used to query for features/trees around the bbox</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">treesBbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">point</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">point</span><span class="p">.</span><span class="nx">y</span><span class="p">],</span>
+<span class="w">        </span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">point</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">point</span><span class="p">.</span><span class="nx">y</span><span class="p">]</span>
+<span class="w">    </span><span class="p">];</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">map</span><span class="p">.</span><span class="nx">queryRenderedFeatures</span><span class="p">(</span><span class="nx">treesBbox</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">layers</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="o">&lt;</span><span class="nx">layer_names</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">});</span>
+</pre></div>
+</div>
+<p>Using the features, we can find the properties of the points at the clicked location and from the properties find the id of the trees. Then we make an API call where we pass in the tree_id to get the information we need and want to display.
+For TreeSnap trees, we need to also communicate with their API to get the data and images we need.</p>
+<p>This is what a typical result looks like when querying features of a clicked point</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Point&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="o">-</span><span class="mf">122.97992706298828</span><span class="p">,</span>
+<span class="w">        </span><span class="mf">40.19228260049829</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;FS0085&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;layer&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;tree-points&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;trees&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;filter&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;!&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">&quot;has&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;point_count&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="s2">&quot;layout&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;icon-image&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">&quot;match&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;get&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;icon_type&quot;</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="mf">0</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;angiosperm_ex&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;gymnosperm_ex&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;angiosperm_app&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;gymnosperm_app&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;treesnap_angio&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="mf">5</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;treesnap_gymno&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;angiosperm_ex&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="s2">&quot;icon-size&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0.04</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;icon-allow-overlap&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;source&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;trees&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;state&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Here the tree_id of the first point in the clicked area is “FS0085”.
+After making a call to the API and passing in this tree_id this should be the response</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s2">&quot;uniquename&quot;</span><span class="o">:</span><span class="s2">&quot;FS0085&quot;</span><span class="p">,</span>
+<span class="s2">&quot;genus&quot;</span><span class="o">:</span><span class="s2">&quot;Pinus&quot;</span><span class="p">,</span>
+<span class="s2">&quot;species&quot;</span><span class="o">:</span><span class="s2">&quot;Pinus balfouriana&quot;</span><span class="p">,</span>
+<span class="s2">&quot;subkingdom&quot;</span><span class="o">:</span><span class="s2">&quot;gymnosperm&quot;</span><span class="p">,</span>
+<span class="s2">&quot;family&quot;</span><span class="o">:</span><span class="s2">&quot;Pinaceae&quot;</span><span class="p">,</span>
+<span class="s2">&quot;latitude&quot;</span><span class="o">:</span><span class="mf">40.1922833333333</span><span class="p">,</span><span class="s2">&quot;longitude&quot;</span><span class="o">:-</span><span class="mf">122.979933333333</span><span class="p">,</span>
+<span class="s2">&quot;coordinate_type&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="s2">&quot;source_id&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span>
+<span class="s2">&quot;tree_num&quot;</span><span class="o">:</span><span class="mf">1486</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="extracting-layer-data">
+<h2><span class="section-number">6.13. </span>Extracting layer data<a class="headerlink" href="#extracting-layer-data" title="Link to this heading"></a></h2>
+<p>Mapbox layers are composited into the map, so we can get the environmental data at a clicked point just by looking at the properties of the layers around the clicked point. For geoserver layers we must get the data using GetFeatureInfo. For more information: <a class="reference external" href="https://docs.geoserver.org/latest/en/user/tutorials/GetFeatureInfo/index.html">https://docs.geoserver.org/latest/en/user/tutorials/GetFeatureInfo/index.html</a></p>
+<p>Getting the environmental data around a clicked point is done by making an ajax call to an endpoint similar to this one:</p>
+<p><code class="code docutils literal notranslate"><span class="pre">https://tgwebdev.cam.uchc.edu/geoserver/wms?SERVICE=WMS&amp;VERSION=1%2E3%2E0&amp;REQUEST=GetFeatureInfo&amp;FORMAT=image%2Fpng&amp;TRANSPARENT=true&amp;QUERY_LAYERS=&lt;layer_name&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;INFO_FORMAT=application%2Fjson&amp;I=128&amp;J=128&amp;WIDTH=256&amp;HEIGHT=256&amp;CRS=EPSG%3A4326&amp;STYLES=&amp;BBOX=[[X1,</span> <span class="pre">Y1],</span> <span class="pre">[X2,</span> <span class="pre">Y2]]</span></code></p>
+<p>Where &lt;layer_name&gt; is the name of the layer that takes a form of a string
+BBOX is the bounding box and takes the form of an array</p>
+</section>
+<section id="adding-and-removing-layers-from-the-map">
+<h2><span class="section-number">6.14. </span>Adding and Removing layers from the map<a class="headerlink" href="#adding-and-removing-layers-from-the-map" title="Link to this heading"></a></h2>
+<p>The layers of Cartograplant are hosted in both geoserver and mapbox. Adding raster layers to the base map on mapbox doesn’t seem to give good results, at least not from the layers we have, and the most success seems to come from converting the layer to GeoJSON using something like QGIS and generating tile sets based on the GeoJSON.
+To add a mapbox layer to the map that has already been composited to the base map, we merely need to change the layer’s visibility settings.</p>
+<p>Mapbox has a library for converting GeoJSON data to vector tilesets: <a class="reference external" href="https://github.com/mapbox/tippecanoe">https://github.com/mapbox/tippecanoe</a></p>
+<p>To learn more about combining layers: <a class="reference external" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/#combine-layers">https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/#combine-layers</a>.</p>
+</section>
+<section id="adding-layer-filters-for-environmental-layers">
+<h2><span class="section-number">6.15. </span>Adding layer filters for environmental layers<a class="headerlink" href="#adding-layer-filters-for-environmental-layers" title="Link to this heading"></a></h2>
+<p>We’ve introduced 2 available environmental layer filters which use different concepts.</p>
+<ol class="arabic simple">
+<li><p>Color filters</p></li>
+<li><p>Year filters.</p></li>
+</ol>
+<p>To enable color filters for environmental layers, you can visit the Cartograplant Admin UI at admin/Cartograplant/settings and either create or edit a layer. You can enable the color filter by checking the checkbox labeled ‘Allow user to select/change colors via the map interface?’. This will add a color picker user interface option when a user selects an environmental layer and allow users to change the color of this layer in realtime.</p>
+<p>To enable year filters for environmental layers, visit the Cartograplant Admin UI and add or edit a layer. You will see a checkbox labeled Allow user to filter by year range via the map interface?. Make sure to select this checkbox and also ensure that you set the additional fields such as Year range geoserver parameter, Year range starting year and Year range ending year.
+The year range geoserver parameter is the paramater used to filter the year range and is usually specific to the fields embedded in a layer (within Geoserver). Currently this filter is only compatible with year data that is stored as integers and will not work properly if the field is saved as a string in Geoserver.
+The start and ending year field limits the UI slider to only select years between these years.</p>
+</section>
+<section id="adding-layer-legend-box-html">
+<h2><span class="section-number">6.16. </span>Adding layer legend box HTML<a class="headerlink" href="#adding-layer-legend-box-html" title="Link to this heading"></a></h2>
+<p>You can also provide custom information for each environmental layer which will then be available to users by utilizing the Layer Legend HTML field.
+You can access this field by going to the Cartograplant Admin UI at admin/Cartograplant/settings and adding or editing a layer. You should be able to see the Layer Legend HTML text area. You can enter plain text or HTML text in this text area. Users will be able to view this information by clicking on the blue info (i) icon when they enable a layer.</p>
+</section>
+<section id="contributing-to-analysis-panels">
+<h2><span class="section-number">6.17. </span>Contributing To Analysis Panels<a class="headerlink" href="#contributing-to-analysis-panels" title="Link to this heading"></a></h2>
+<p>Workflows run in the analysis panel are handled by NextFlow. NextFlow is a workflow manager that enables the writing of scripts in a way that is easy to read, write and reproduce analysis.</p>
+<p>documentation: <a href="#id26"><span class="problematic" id="id27">`Page&lt;https://www.nextflow.io/docs/latest/overview.html&gt;`_</span></a>
+framework: <a href="#id28"><span class="problematic" id="id29">`Page&lt;https://nf-co.re/docs/usage/getting_started/introduction&gt;`_</span></a></p>
+<p>The scripts follow DSL2 syntax logic and run on the mantis server. The Workflows get pulled by ng-nginx and are stored in ~/.nextflow/assets folder.</p>
+<p>Each tab in the Analysis panel UI has a dedicated workflow. Workflows and tabs are based on the type of processes/analysis being run. The types of processes are:</p>
+<ol class="arabic simple">
+<li><p>Study Selection</p></li>
+<li><p>Phenotypic Selection</p></li>
+<li><p>Genotypic Selection (Workflow)</p></li>
+<li><p>Variant Filtering (Workflow)</p></li>
+<li><p>Population Structure (Workflow)</p></li>
+<li><p>Genome-wide Association (Workflow)</p></li>
+</ol>
+</section>
+<section id="generating-analysis-tables-and-passing-to-sambada">
+<h2><span class="section-number">6.18. </span>Generating analysis tables and passing to Sambada<a class="headerlink" href="#generating-analysis-tables-and-passing-to-sambada" title="Link to this heading"></a></h2>
+<p>Marker type and environmental value tables are created, written to a file and submitted to a galaxy workflow to perform analysis. Sambada is the framework used for landscape genomics analysis.
+To generate the marker types table, which will be entirely composed of SNP, we get all the markers from the trees selected that are of the SNP type. We store all the available SNP markers into a set, then go through each of the SNPs in the set and cross reference with the SNP markers that the current tree has.
+If the current SNP from the entire dataset chosen does not exist for the current tree, then we set the cell value to ‘NaN’ otherwise we set it to whatever correspondin value the tree has based on homogyneous and heterogyneuos from reference.
+We perform some further array operations on the resulting 2D array which simulates the table to generate a chart for it using D3js. The user can further filter the SNP table using the generated chart filter options.</p>
+<p>For the environmental value table we collect all the tree_ids of the selected trees, and create a mapping of coordinate location to array of tree_ids in that location. Then we go through all the keys of the mapping, which will be of an array of coordinates, and extract the environmental values based on the activated layers.</p>
+<p>We write the final arrays generated into a CSV file, and send to the galaxy Sambada workflow using the Tripal Galaxy API.
+To check for results and whether an analysis has been completed, the Tripal Galaxy API functions were used.</p>
+</section>
+<section id="saving-and-loading-sessions">
+<h2><span class="section-number">6.19. </span>Saving and loading sessions<a class="headerlink" href="#saving-and-loading-sessions" title="Link to this heading"></a></h2>
+<p>Based on the session_id provided in the url, if the session_id is valid then all session related data from that session is loaded to the map on page load. The session_data is requested from the API and takes the form of a JSON object.
+Logged in users have access to all their saved sessions and can load or delete any one of them as they wish. Saving sessions is entirely under the user’s control, if the user is not logged in then the session data is saved, and if the user is logged in then the user’s session identification parameters such as title and comments are also saved.
+The complex items such as leyers and filters applied are saved as jsonb data types, while the other values are saved as more primitive sql data types.</p>
+</section>
+</section>
+<section id="cartograplant-api-reference">
+<h1><span class="section-number">7. </span>Cartograplant API Reference<a class="headerlink" href="#cartograplant-api-reference" title="Link to this heading"></a></h1>
+<p>Cartograplant communicates with its own API to send and request data. To gain access to this API, first create a TreeGenes account and generate an API key. The API contains both normal user level API functions as well as administrative API functions. The API key is required for normal user-level API usage such as accessing tree information while the asup key is needed to performan administrative functions such as clearing the cache.</p>
+<section id="configuration">
+<h2><span class="section-number">7.1. </span>CONFIGURATION<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>The latest version of Cartograplant API (NodeJS) uses configuration settings within the config.js file.</p>
+<p>The most relevant configuration variable in relation to the Cartograplant API is the asup key which is an abbreviation for api_superuser_password.</p>
+<p>You must set this password appropriately in order to perform administrative level API functions such as remove_treegenes_trees, reload_trees and reload_trees_status.</p>
+</section>
+<section id="admin-api-functions">
+<h2><span class="section-number">7.2. </span>ADMIN API FUNCTIONS<a class="headerlink" href="#admin-api-functions" title="Link to this heading"></a></h2>
+<p>The functions below require the ?asup= get variable in order to execute.</p>
+</section>
+<section id="remove-treegenes-trees">
+<h2><span class="section-number">7.3. </span>REMOVE TREEGENES TREES<a class="headerlink" href="#remove-treegenes-trees" title="Link to this heading"></a></h2>
+<p>Removes TreeGenes trees from the public.ct_trees table. This function is used before the TREES RELOAD function.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/remove_treegenes_trees?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trees-reload">
+<h2><span class="section-number">7.4. </span>TREES RELOAD<a class="headerlink" href="#trees-reload" title="Link to this heading"></a></h2>
+<p>Regenerates the views that contain tree information that are used by Cartograplant API.
+This function answers to the browser but performs multiple tasks in the background. Regenerating the trees can take several minutes or even hours to complete depending on the size of your tree database. Most of the tree_reload function performs nested SQL/Database manipulations and this is why the function can take so long - since multiple views and tables are dependent on each other. The following are generated in the order listed:</p>
+<ul class="simple">
+<li><p>chado.new_geno_view</p></li>
+<li><p>chado.plusgeno_view</p></li>
+<li><p>chado.new_pheno_view</p></li>
+<li><p>chado.ct_view</p></li>
+<li><p>ct_trees_all_view</p></li>
+</ul>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/trees_reload?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="trees-reload-status">
+<h2><span class="section-number">7.5. </span>TREES RELOAD STATUS<a class="headerlink" href="#trees-reload-status" title="Link to this heading"></a></h2>
+<p>Returns whether the TREE RELOAD function is currently regenerating the views. This can be used to determine if the task is ongoing/running or not running. You can reload this page multiple times to get the current status.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/reload_status?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cache-clear">
+<h2><span class="section-number">7.6. </span>CACHE CLEAR<a class="headerlink" href="#cache-clear" title="Link to this heading"></a></h2>
+<p>Most SQL results are stored within the cache for usually 24 hours. Especially during development, this is not usually ideal - this is where the cache_clear function is useful. It clears all memory records and this assures you that the information you are retrieving from the Cartograplant UI is valid and fresh.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/clear?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="consolidate-dryad-trees-from-treegenes">
+<h2><span class="section-number">7.7. </span>CONSOLIDATE DRYAD TREES FROM TREEGENES<a class="headerlink" href="#consolidate-dryad-trees-from-treegenes" title="Link to this heading"></a></h2>
+<p>Converts TPPS submitted trees that are categorized as DRYAD studies into the correct database table ct_trees. It updates the source_id to 2 which is the DRYAD category. This must be done periodically and is usually called with a cron every 12 hours on production environments.
+This allows Cartograplant to properly display these trees as DRYAD trees. It also affects the DRYAD dataset filter.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/dryad/consolidate_dryad_trees_from_treegenes?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="consolidate-treesnap-subkingdoms">
+<h2><span class="section-number">7.8. </span>CONSOLIDATE TREESNAP SUBKINGDOMS<a class="headerlink" href="#consolidate-treesnap-subkingdoms" title="Link to this heading"></a></h2>
+<p>TreeSnap trees are imported from the TREESNAP database (remotely). During the import, any trees with their subkingdom value as NULL in the ct_trees table is cross referenced
+with the organismprop table in an attempt to retrieve a valid subkingdom and them updated.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/consolidate_subkingdoms?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="consolidate-treesnap-families">
+<h2><span class="section-number">7.9. </span>CONSOLIDATE TREESNAP FAMILIES<a class="headerlink" href="#consolidate-treesnap-families" title="Link to this heading"></a></h2>
+<p>TreeSnap trees /date are imported from the TREESNAP database (via the remote API). During the import, any trees with their family value as NULL in the ct_trees table is cross referenced
+with the organismprop table in an attempt to retrieve a valid family and then updated.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/consolidate_families?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reload-treesnap">
+<h2><span class="section-number">7.10. </span>RELOAD TREESNAP<a class="headerlink" href="#reload-treesnap" title="Link to this heading"></a></h2>
+<p>TreeSnap trees / data are imported from the TREESNAP database (via the remote API). From time to time, when TreeSnap updates it’s remote database, it is important for Cartograplant to pull the latest updates.
+This API function call will do this, continuing where it left off instead of reimporting the whole database.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/reload?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="force-reload-treesnap">
+<h2><span class="section-number">7.11. </span>FORCE RELOAD TREESNAP<a class="headerlink" href="#force-reload-treesnap" title="Link to this heading"></a></h2>
+<p>TreeSnap trees / data are imported from the TREESNAP database (via the remote API). This is mostly used for major debugging. This function will pull the entire
+TREESNAP database into Cartograplant.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/force_reload?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="force-reload-bienv4-trees">
+<h2><span class="section-number">7.12. </span>FORCE RELOAD BIENv4 TREES<a class="headerlink" href="#force-reload-bienv4-trees" title="Link to this heading"></a></h2>
+<p>This function imports BIEN tree data from the publicly accessible BIENv4 database. This function uses unique TreeGenes genus groups and query the BIENv4’s massive dataset for related trees. It does not import the entire BIENv4 dataset but rather a subset from the distinct genus groups from TreeGenes.
+This data is imported into the public.ct_trees table with the source_id set as 3.</p>
+<p>Due to the size of this dataset (millions of records returned), nodejs may need more memory for this function to successfully complete.
+To avoid out of memory errors and incomplete imports, you can tweak NodeJS to run with a higher amount of memory (once available on server).
+Example command to do so (assigning 4 GB of memory to NodeJS): <code class="code docutils literal notranslate"><span class="pre">node</span> <span class="pre">--max-old-space-size=4096</span> <span class="pre">Cartograplant_api.js</span></code></p>
+<p>IMPORTANT: Like most force reload functions, this force reload function will delete all data from the table before importing data. Please remember this is resource intensive (NodeJS memory intensive) and also database server (IO writes and CPU) and can take a day or more to fully complete. It is not designed to be used on a daily basis for refreshing data.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/bienv4/trees/force_reload?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="force-reload-bienv4-endangered-taxa">
+<h2><span class="section-number">7.13. </span>FORCE RELOAD BIENv4 ENDANGERED TAXA<a class="headerlink" href="#force-reload-bienv4-endangered-taxa" title="Link to this heading"></a></h2>
+<p>This function imports BIEN endangered taxa data from the publicly accessible BIENv4 database. This function downloads the entire dataset into Cartograplant for display purposes.
+The data is imported into the public.ct_bien_endangered_taxa table.</p>
+<p>IMPORTANT: Like most force reload functions, this force reload function will delete all data from the table before importing data.</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/bienv4/endangered_taxa/force_reload?asup=&lt;password&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>asup</p></td>
+<td><p>string</p></td>
+<td><p>API Super User Password</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="normal-user-api-functions">
+<h2><span class="section-number">7.14. </span>NORMAL USER API FUNCTIONS<a class="headerlink" href="#normal-user-api-functions" title="Link to this heading"></a></h2>
+<p>The functions below only require the ?api_key= get variable in order to execute.</p>
+</section>
+<section id="get-trees">
+<h2><span class="section-number">7.15. </span>GET TREES<a class="headerlink" href="#get-trees" title="Link to this heading"></a></h2>
+<p>Gets all the trees currently curated by TreeGenes and other sources</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees?api_key=&lt;api_key&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+</tbody>
+</table>
+<section id="example-response">
+<h3><span class="section-number">7.15.1. </span>Example Response<a class="headerlink" href="#example-response" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0001&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8377888</span><span class="p">,</span><span class="mf">45.9715095</span><span class="p">]}},</span>
+<span class="w"> </span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0002&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8380944</span><span class="p">,</span><span class="mf">45.9715108</span><span class="p">]}}</span>
+<span class="w"> </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="response-fields">
+<h3><span class="section-number">7.15.2. </span>Response Fields<a class="headerlink" href="#response-fields" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>icon_type</p></td>
+<td><p>integer</p></td>
+<td><p>The type of icon for the feature</p></td>
+</tr>
+<tr class="row-odd"><td><p>id</p></td>
+<td><p>string</p></td>
+<td><p>The id of the feature</p></td>
+</tr>
+<tr class="row-even"><td><p>geometry.type</p></td>
+<td><p>string</p></td>
+<td><p>The type of geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p>geometry.coordinates</p></td>
+<td><p>array of doubles</p></td>
+<td><p>Coordinates [long, lat]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-trees-based-on-query">
+<h2><span class="section-number">7.16. </span>GET TREES BASED ON QUERY<a class="headerlink" href="#get-trees-based-on-query" title="Link to this heading"></a></h2>
+<p>Gets all the trees based on the active datasets on the map and the filter created by the user</p>
+<p>Type of Request: POST</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/q?api_key=&lt;api_key&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>query</p></td>
+<td><p>object</p></td>
+<td><p>The query object derived from query builder</p></td>
+</tr>
+<tr class="row-even"><td><p>active_sources</p></td>
+<td><p>array of strings</p></td>
+<td><p>The active datasets on the map</p></td>
+</tr>
+</tbody>
+</table>
+<p>Sample parameters passed</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;condition&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;AND&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;rules&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;family&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;field&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;family&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;input&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Anacardiaceae&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="s2">&quot;active_sources&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;0&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;2&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="example-post-request-using-ajax">
+<h3><span class="section-number">7.16.1. </span>Example POST request using ajax<a class="headerlink" href="#example-post-request-using-ajax" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/q?api_key=&lt;api_key&gt;&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="k">async</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">jsonData</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><span class="section-number">7.16.2. </span>Example Response<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;features&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TGDR045-161613&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;point&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="o">-</span><span class="mf">54.36032</span><span class="p">,</span>
+<span class="w">              </span><span class="o">-</span><span class="mf">31.01048</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TGDR045-161614&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;point&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="o">-</span><span class="mf">54.35471</span><span class="p">,</span>
+<span class="w">              </span><span class="o">-</span><span class="mf">31.01187</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;center&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="o">-</span><span class="mf">56.10413</span><span class="p">,</span>
+<span class="w">        </span><span class="o">-</span><span class="mf">30.2429</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="s2">&quot;num_species&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;num_pubs&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;num_trees&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">278</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><span class="section-number">7.16.3. </span>Response Fields<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>features</p></td>
+<td><p>array of objects</p></td>
+<td><p>A feature list of points</p></td>
+</tr>
+<tr class="row-odd"><td><p>center</p></td>
+<td><p>array of doubles</p></td>
+<td><p>The coordinate where most points are located</p></td>
+</tr>
+<tr class="row-even"><td><p>num_species</p></td>
+<td><p>integer</p></td>
+<td><p>Number of species resulting from this query</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_pubs</p></td>
+<td><p>integer</p></td>
+<td><p>Number of publications resulting from this query</p></td>
+</tr>
+<tr class="row-even"><td><p>num_trees</p></td>
+<td><p>integer</p></td>
+<td><p>Number of trees resulting from this query</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-trees-based-on-source">
+<h2><span class="section-number">7.17. </span>GET TREES BASED ON SOURCE<a class="headerlink" href="#get-trees-based-on-source" title="Link to this heading"></a></h2>
+<p>Gets all the trees based on their dataset source</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/source?api_key=&lt;api_key&gt;&amp;source_id=&lt;source_id&gt;</span></code></p>
+<p>Query string parameters</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>source_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of the source dataset</p></td>
+</tr>
+</tbody>
+</table>
+<section id="example-get-request">
+<h3><span class="section-number">7.17.1. </span>Example GET request<a class="headerlink" href="#example-get-request" title="Link to this heading"></a></h3>
+<p><code class="code docutils literal notranslate"><span class="pre">https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/source?api_key=&lt;api_key&gt;&amp;source_id=1&amp;source_id=2</span></code></p>
+</section>
+<section id="id3">
+<h3><span class="section-number">7.17.2. </span>Example Response<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0001&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8377888</span><span class="p">,</span><span class="mf">45.9715095</span><span class="p">]}},</span>
+<span class="w"> </span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Feature&quot;</span><span class="p">,</span><span class="s2">&quot;properties&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0002&quot;</span><span class="p">},</span><span class="s2">&quot;geometry&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;Point&quot;</span><span class="p">,</span><span class="s2">&quot;coordinates&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">10.8380944</span><span class="p">,</span><span class="mf">45.9715108</span><span class="p">]}}</span>
+<span class="w"> </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3><span class="section-number">7.17.3. </span>Response Fields<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>icon_type</p></td>
+<td><p>integer</p></td>
+<td><p>The type of icon for the feature</p></td>
+</tr>
+<tr class="row-odd"><td><p>id</p></td>
+<td><p>string</p></td>
+<td><p>The id of the feature</p></td>
+</tr>
+<tr class="row-even"><td><p>geometry.type</p></td>
+<td><p>string</p></td>
+<td><p>The type of geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p>geometry.coordinates</p></td>
+<td><p>array of doubles</p></td>
+<td><p>Coordinates [long, lat]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-basic-information">
+<h2><span class="section-number">7.18. </span>GET TREE BASIC INFORMATION<a class="headerlink" href="#get-tree-basic-information" title="Link to this heading"></a></h2>
+<p>Get the basic information of the tree</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/tree?api_key=&lt;api_key&gt;&amp;tree_id=&lt;tree_id&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_id</p></td>
+<td><p>string</p></td>
+<td><p>The unique id of the individual tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="example-get-request-using-ajax">
+<h3><span class="section-number">7.18.1. </span>Example GET request using ajax<a class="headerlink" href="#example-get-request-using-ajax" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/tree?api_key=&lt;api_key&gt;&amp;tree_id=ABAL0001&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">jsonData</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3><span class="section-number">7.18.2. </span>Example Response<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;uniquename&quot;</span><span class="o">:</span><span class="s2">&quot;ABAL0001&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;genus&quot;</span><span class="o">:</span><span class="s2">&quot;Abies&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;species&quot;</span><span class="o">:</span><span class="s2">&quot;Abies alba&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;subkingdom&quot;</span><span class="o">:</span><span class="s2">&quot;gymnosperm&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;family&quot;</span><span class="o">:</span><span class="s2">&quot;Pinaceae&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;latitude&quot;</span><span class="o">:</span><span class="mf">45.9715095</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;longitude&quot;</span><span class="o">:</span><span class="mf">10.8377888</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;coordinate_type&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;source_id&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;icon_type&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;tree_num&quot;</span><span class="o">:</span><span class="mf">1</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3><span class="section-number">7.18.3. </span>Response Fields<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>uniquename</p></td>
+<td><p>string</p></td>
+<td><p>The id of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>genus</p></td>
+<td><p>string</p></td>
+<td><p>The genus of the tree</p></td>
+</tr>
+<tr class="row-even"><td><p>species</p></td>
+<td><p>string</p></td>
+<td><p>The species of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>subkingdom</p></td>
+<td><p>string</p></td>
+<td><p>The plant group the tree belongs to</p></td>
+</tr>
+<tr class="row-even"><td><p>family</p></td>
+<td><p>string</p></td>
+<td><p>The family of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>latitude</p></td>
+<td><p>double</p></td>
+<td><p>The latitude coordinate of the tree</p></td>
+</tr>
+<tr class="row-even"><td><p>longitude</p></td>
+<td><p>double</p></td>
+<td><p>The longitude coordinate of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>coordinate_type</p></td>
+<td><p>integer</p></td>
+<td><p>The type of coordinate for the tree recorded</p></td>
+</tr>
+<tr class="row-even"><td><p>source_id</p></td>
+<td><p>integer</p></td>
+<td><p>The dataset source that the tree originates from</p></td>
+</tr>
+<tr class="row-odd"><td><p>icon_type</p></td>
+<td><p>integer</p></td>
+<td><p>The type of icon that represents the tree on the map</p></td>
+</tr>
+<tr class="row-even"><td><p>tree_num</p></td>
+<td><p>integer</p></td>
+<td><p>The number of the tree</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-phenotypes">
+<h2><span class="section-number">7.19. </span>GET TREE PHENOTYPES<a class="headerlink" href="#get-tree-phenotypes" title="Link to this heading"></a></h2>
+<p>Get the phenotype information of the tree</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/phenotypes?api_key=&lt;api_key&gt;&amp;tree_id=&lt;tree_id&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_id</p></td>
+<td><p>string</p></td>
+<td><p>The unique id of the individual tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id7">
+<h3><span class="section-number">7.19.1. </span>Example GET request using ajax<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/phenotypes?api_key=&lt;api_key&gt;&amp;tree_id=TGDR069-190112&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">jsonData</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3><span class="section-number">7.19.2. </span>Example Response<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;tree_acc&quot;</span><span class="o">:</span><span class="s2">&quot;TGDR069-190112&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;flush&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;uniquename&quot;</span><span class="o">:</span><span class="s2">&quot;flush-190112&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;phenotype_name&quot;</span><span class="o">:</span><span class="s2">&quot;Budset scoring&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="s2">&quot;119.6&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;units&quot;</span><span class="o">:</span><span class="s2">&quot;days&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;po_name&quot;</span><span class="o">:</span><span class="s2">&quot; bud burst stage&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;po_accession&quot;</span><span class="o">:</span><span class="s2">&quot;PO:0025532&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pato_name&quot;</span><span class="o">:</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pato_accession&quot;</span><span class="o">:</span><span class="s2">&quot;PATO:0000165&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cvterm_name&quot;</span><span class="o">:</span><span class="s2">&quot;Budset scoring&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;cvterm_accession&quot;</span><span class="o">:</span><span class="s2">&quot;CO_357:1000010&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3><span class="section-number">7.19.3. </span>Response Fields<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tree_acc</p></td>
+<td><p>string</p></td>
+<td><p>The id of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>name</p></td>
+<td><p>string</p></td>
+<td><p>The name of the phenotype</p></td>
+</tr>
+<tr class="row-even"><td><p>uniquename</p></td>
+<td><p>string</p></td>
+<td><p>Uniquename of the phenotype assigned by chado</p></td>
+</tr>
+<tr class="row-odd"><td><p>phenotype_name</p></td>
+<td><p>string</p></td>
+<td><p>The phenotype name</p></td>
+</tr>
+<tr class="row-even"><td><p>units</p></td>
+<td><p>string</p></td>
+<td><p>The units of the value measured</p></td>
+</tr>
+<tr class="row-odd"><td><p>po_name</p></td>
+<td><p>string</p></td>
+<td><p>The plant ontology name of the tree</p></td>
+</tr>
+<tr class="row-even"><td><p>pato_name</p></td>
+<td><p>string</p></td>
+<td><p>Phenotype properties</p></td>
+</tr>
+<tr class="row-odd"><td><p>pato_accession</p></td>
+<td><p>string</p></td>
+<td><p>Accession of the pato</p></td>
+</tr>
+<tr class="row-even"><td><p>cvterm_name</p></td>
+<td><p>string</p></td>
+<td><p>Ontology term</p></td>
+</tr>
+<tr class="row-odd"><td><p>cvterm_accession</p></td>
+<td><p>string</p></td>
+<td><p>Ontology term accession</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-genotypes">
+<h2><span class="section-number">7.20. </span>GET TREE GENOTYPES<a class="headerlink" href="#get-tree-genotypes" title="Link to this heading"></a></h2>
+<p>Get the genotype information of the tree</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/genotypes?api_key=&lt;api_key&gt;&amp;tree_id=&lt;tree_id&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_id</p></td>
+<td><p>string</p></td>
+<td><p>The unique id of the individual tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id10">
+<h3><span class="section-number">7.20.1. </span>Example GET request using ajax<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/genotypes?api_key=&lt;api_key&gt;&amp;tree_id=TGDR069-190112&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">jsonData</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h3><span class="section-number">7.20.2. </span>Example Response<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;tree_acc&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;TGDR001-7014&quot;</span>
+<span class="w">        </span><span class="s2">&quot;uniquename&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SNP-PTRI.339.C1-162-Potr-A:A&quot;</span>
+<span class="w">        </span><span class="s2">&quot;marker_name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;-&quot;</span>
+<span class="w">        </span><span class="s2">&quot;description&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;A:A&quot;</span>
+<span class="w">        </span><span class="s2">&quot;marker_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;SNP&quot;</span>
+<span class="w">        </span><span class="s2">&quot;study_type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Natural Population (Landscape)&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3><span class="section-number">7.20.3. </span>Response Fields<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tree_acc</p></td>
+<td><p>string</p></td>
+<td><p>The id of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>uniquename</p></td>
+<td><p>string</p></td>
+<td><p>Uniquename of the phenotype assigned by chado</p></td>
+</tr>
+<tr class="row-even"><td><p>marker_name</p></td>
+<td><p>string</p></td>
+<td><p>The marker name</p></td>
+</tr>
+<tr class="row-odd"><td><p>description</p></td>
+<td><p>string</p></td>
+<td><p>The description</p></td>
+</tr>
+<tr class="row-even"><td><p>study_type</p></td>
+<td><p>string</p></td>
+<td><p>The study type</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-markers">
+<h2><span class="section-number">7.21. </span>GET TREE MARKERS<a class="headerlink" href="#get-tree-markers" title="Link to this heading"></a></h2>
+<p>Get the marker types and additional genotype information associated with the tree</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/markertypes?api_key=&lt;api_key&gt;&amp;tree_id=&lt;tree_id&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_id</p></td>
+<td><p>String</p></td>
+<td><p>The unique id of the individual tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id13">
+<h3><span class="section-number">7.21.1. </span>Example GET request using ajax<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/markertypes?api_key=&lt;api_key&gt;&amp;tree_id=TGDR006-14454&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3><span class="section-number">7.21.2. </span>Example Response<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;tree_acc&quot;</span><span class="o">:</span><span class="s2">&quot;TGDR006-14454&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;marker_name&quot;</span><span class="o">:</span><span class="s2">&quot;0_10207_01_333-Pita&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;description&quot;</span><span class="o">:</span><span class="s2">&quot;C:C&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;marker_type&quot;</span><span class="o">:</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;study_type&quot;</span><span class="o">:</span><span class="s2">&quot;GxP&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;quality_score&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;marker_technology&quot;</span><span class="o">:</span><span class="s2">&quot;array&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;assembly_type&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;scaffold&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;position&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;original_name&quot;</span><span class="o">:</span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h3><span class="section-number">7.21.3. </span>Response Fields<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>tree_acc</p></td>
+<td><p>string</p></td>
+<td><p>The id of the tree</p></td>
+</tr>
+<tr class="row-odd"><td><p>marker_name</p></td>
+<td><p>string</p></td>
+<td><p>The name of the marker</p></td>
+</tr>
+<tr class="row-even"><td><p>description</p></td>
+<td><p>string</p></td>
+<td><p>The description of the genotype</p></td>
+</tr>
+<tr class="row-odd"><td><p>marker_type</p></td>
+<td><p>string</p></td>
+<td><p>The type of the marker</p></td>
+</tr>
+<tr class="row-even"><td><p>study_type</p></td>
+<td><p>string</p></td>
+<td><p>The type of the study</p></td>
+</tr>
+<tr class="row-odd"><td><p>quality_score</p></td>
+<td><p>unknown</p></td>
+<td><p>The quality score</p></td>
+</tr>
+<tr class="row-even"><td><p>marker_technology</p></td>
+<td><p>string</p></td>
+<td><p>The technology of the marker</p></td>
+</tr>
+<tr class="row-odd"><td><p>assembly_type</p></td>
+<td><p>unkown</p></td>
+<td><p>The assembly type</p></td>
+</tr>
+<tr class="row-even"><td><p>scaffold</p></td>
+<td><p>unknown</p></td>
+<td><p>The scaffold of the genotype</p></td>
+</tr>
+<tr class="row-odd"><td><p>position</p></td>
+<td><p>unknown</p></td>
+<td><p>The position of the genotype</p></td>
+</tr>
+<tr class="row-even"><td><p>original name</p></td>
+<td><p>unknown</p></td>
+<td><p>The original name of the genotype</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-publications">
+<h2><span class="section-number">7.22. </span>GET TREE PUBLICATIONS<a class="headerlink" href="#get-tree-publications" title="Link to this heading"></a></h2>
+<p>Get the publication information for a tree if it has a publication associated with it</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/publications?api_key=&lt;api_key&gt;&amp;tree_acc=&lt;tree_acc&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_acc</p></td>
+<td><p>String</p></td>
+<td><p>Study accession of a tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id16">
+<h3><span class="section-number">7.22.1. </span>Example GET request using ajax<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/publications?api_key=&lt;api_key&gt;&amp;tree_acc=TGDR002&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="id17">
+<h3><span class="section-number">7.22.2. </span>Example Response<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;project_id&quot;</span><span class="o">:</span><span class="s2">&quot;45&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;accession&quot;</span><span class="o">:</span><span class="s2">&quot;TGDR002&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pub_id&quot;</span><span class="o">:</span><span class="s2">&quot;21371&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="s2">&quot;Astonishingly low genetic variation in Quercus acutissima, an important tree species in Satoyama, a traditional Japanese rural forest and agricultural landscape, revealed by chloroplast microsatellite markers&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;author&quot;</span><span class="o">:</span><span class="s2">&quot;Tsuda, Yoshiaki&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;species&quot;</span><span class="o">:</span><span class="s2">&quot;Quercus acutissima&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;tree_count&quot;</span><span class="o">:</span><span class="s2">&quot;2152&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;phen_count&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;ontology_ids&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;phenotypes_assessed&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;gen_count&quot;</span><span class="o">:</span><span class="s2">&quot;12912&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;markers&quot;</span><span class="o">:</span><span class="s2">&quot;cpSSR&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;study_type&quot;</span><span class="o">:</span><span class="s2">&quot;G&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;volumetitle&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;volume&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;series_name&quot;</span><span class="o">:</span><span class="s2">&quot;Tree Genetics &amp; Genomes&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;issue&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;pyear&quot;</span><span class="o">:</span><span class="s2">&quot;2012&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pages&quot;</span><span class="o">:</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;miniref&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;uniquename&quot;</span><span class="o">:</span><span class="s2">&quot;Saito, Yoko, Tsuda, Yoshiaki , Uchiyama, Kentaro , Fukuda, Tomohide , Seto, Yasuhiro , Kim, Pangi , Ide, Yuji Astonishingly low genetic variation in Quercus acutissima, an important tree species in Satoyama, a traditional Japanese rural forest and agricultural landscape, revealed by chloroplast microsatellite markers 2012; () -&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;type_id&quot;</span><span class="o">:</span><span class="s2">&quot;229&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;is_obsolete&quot;</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;publisher&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;pubplace&quot;</span><span class="o">:</span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h3><span class="section-number">7.22.3. </span>Response Fields<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>project_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of the project</p></td>
+</tr>
+<tr class="row-odd"><td><p>accession</p></td>
+<td><p>string</p></td>
+<td><p>The accession of the publication</p></td>
+</tr>
+<tr class="row-even"><td><p>pub_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of the publication</p></td>
+</tr>
+<tr class="row-odd"><td><p>title</p></td>
+<td><p>string</p></td>
+<td><p>The title of this study</p></td>
+</tr>
+<tr class="row-even"><td><p>author</p></td>
+<td><p>string</p></td>
+<td><p>The primary author fo this study</p></td>
+</tr>
+<tr class="row-odd"><td><p>species</p></td>
+<td><p>string</p></td>
+<td><p>The species focused on by this study</p></td>
+</tr>
+<tr class="row-even"><td><p>tree_count</p></td>
+<td><p>integer</p></td>
+<td><p>Number of trees assessed by this study</p></td>
+</tr>
+<tr class="row-odd"><td><p>phen_count</p></td>
+<td><p>intger</p></td>
+<td><p>Number of phenotypes for this study</p></td>
+</tr>
+<tr class="row-even"><td><p>ontology_ids</p></td>
+<td><p>string</p></td>
+<td><p>The ids of the associated ontologies</p></td>
+</tr>
+<tr class="row-odd"><td><p>phenotypes_assessed</p></td>
+<td><p>integer</p></td>
+<td><p>The phenotypes assessed</p></td>
+</tr>
+<tr class="row-even"><td><p>gen_count</p></td>
+<td><p>integer</p></td>
+<td><p>Number of genotypes for this study</p></td>
+</tr>
+<tr class="row-odd"><td><p>markers</p></td>
+<td><p>string</p></td>
+<td><p>Markers recorded for the species of this study</p></td>
+</tr>
+<tr class="row-even"><td><p>study_type</p></td>
+<td><p>string</p></td>
+<td><p>The type of the study</p></td>
+</tr>
+<tr class="row-odd"><td><p>volumetitle</p></td>
+<td><p>string</p></td>
+<td><p>Title of volume where this study was published</p></td>
+</tr>
+<tr class="row-even"><td><p>volume</p></td>
+<td><p>string</p></td>
+<td><p>The volume of the paper published</p></td>
+</tr>
+<tr class="row-odd"><td><p>series_name</p></td>
+<td><p>string</p></td>
+<td><p>The series of the published paper</p></td>
+</tr>
+<tr class="row-even"><td><p>issue</p></td>
+<td><p>string</p></td>
+<td><p>The issue of the published paper</p></td>
+</tr>
+<tr class="row-odd"><td><p>pages</p></td>
+<td><p>string</p></td>
+<td><p>The pages of the published paper</p></td>
+</tr>
+<tr class="row-even"><td><p>miniref</p></td>
+<td><p>string</p></td>
+<td><p>The mini reference to the paper</p></td>
+</tr>
+<tr class="row-odd"><td><p>uniquename</p></td>
+<td><p>string</p></td>
+<td><p>The uniquename of the paper</p></td>
+</tr>
+<tr class="row-even"><td><p>type_id</p></td>
+<td><p>integer</p></td>
+<td><p>The type_id of the paper</p></td>
+</tr>
+<tr class="row-odd"><td><p>is_obselete</p></td>
+<td><p>boolean</p></td>
+<td><p>Is the paper obselete</p></td>
+</tr>
+<tr class="row-even"><td><p>publisher</p></td>
+<td><p>string</p></td>
+<td><p>The publisher of the paper</p></td>
+</tr>
+<tr class="row-odd"><td><p>pubplace</p></td>
+<td><p>string</p></td>
+<td><p>The place??? of the publication</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-tree-treesnap-complete">
+<h2><span class="section-number">7.23. </span>GET TREE TREESNAP COMPLETE<a class="headerlink" href="#get-tree-treesnap-complete" title="Link to this heading"></a></h2>
+<p>TreeSnap trees are accessed through the TreeSnap API provided by <a class="reference external" href="https://treesnap.org">https://treesnap.org</a>
+Please visit the site, download their app and submit your own trees if you want to contribute both to TreeSnap and Cartograplant</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/treesnap?api_key=&lt;api_key&gt;&amp;tree_id=&lt;tree_id&gt;</span></code></p>
+<p>Query string parameters:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>tree_id</p></td>
+<td><p>string</p></td>
+<td><p>The unique id of a treesnap tree</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id19">
+<h3><span class="section-number">7.23.1. </span>Example GET request using ajax<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/treesnap?api_key=&lt;api_key&gt;&amp;tree_id=treesnap.1&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">contentType</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">success</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>The response will be the same as accessing the TreeSnap API directly for individual trees.
+To see the full documentation for TreeSnap’s API please go to:
+<a class="reference external" href="https://github.com/statonlab/Treesnap-website/wiki/Public-API-Documentation">https://github.com/statonlab/Treesnap-website/wiki/Public-API-Documentation</a></p>
+</section>
+</section>
+<section id="get-session-data">
+<h2><span class="section-number">7.24. </span>GET SESSION DATA<a class="headerlink" href="#get-session-data" title="Link to this heading"></a></h2>
+<p>Gets saved session state properties</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/session?api_key=&lt;api_key&gt;&amp;session_id=&lt;session_id&gt;</span></code></p>
+<p>Query string parameters</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>session_id</p></td>
+<td><p>string</p></td>
+<td><p>The id of the session</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id20">
+<h3><span class="section-number">7.24.1. </span>Example Response<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;layers&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;filters&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;zoom&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;pitch&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;bearing&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;center&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;excluded_trees&quot;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;session_id&quot;</span><span class="o">:&lt;</span><span class="nx">session_id</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id21">
+<h3><span class="section-number">7.24.2. </span>Response Fields<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>session_id</p></td>
+<td><p>string</p></td>
+<td><p>The session id</p></td>
+</tr>
+<tr class="row-even"><td><p>layers</p></td>
+<td><p>object</p></td>
+<td><p>The layers activated in this session</p></td>
+</tr>
+<tr class="row-odd"><td><p>filters</p></td>
+<td><p>object</p></td>
+<td><p>The filters and active datasets</p></td>
+</tr>
+<tr class="row-even"><td><p>excluded_trees</p></td>
+<td><p>array</p></td>
+<td><p>Trees excluded for analysis</p></td>
+</tr>
+<tr class="row-odd"><td><p>zoom</p></td>
+<td><p>double</p></td>
+<td><p>Map zoom property</p></td>
+</tr>
+<tr class="row-even"><td><p>pitch</p></td>
+<td><p>double</p></td>
+<td><p>Map pitch proterty</p></td>
+</tr>
+<tr class="row-odd"><td><p>bearing</p></td>
+<td><p>double</p></td>
+<td><p>Map bearing property</p></td>
+</tr>
+<tr class="row-even"><td><p>center</p></td>
+<td><p>array of doubles</p></td>
+<td><p>Center of map [long, lat]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-user-session">
+<h2><span class="section-number">7.25. </span>GET USER SESSION<a class="headerlink" href="#get-user-session" title="Link to this heading"></a></h2>
+<p>Gets session information for a saved session by the user</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/session/by-user?api_key=&lt;api_key&gt;&amp;user_id=&lt;user_id&gt;&amp;session_id=&lt;session_id&gt;</span></code></p>
+<p>Query string parameters</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>user_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of user created by drupal</p></td>
+</tr>
+<tr class="row-even"><td><p>session_id</p></td>
+<td><p>string</p></td>
+<td><p>The id of the session of the user</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id22">
+<h3><span class="section-number">7.25.1. </span>Example Response<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;user_id&quot;</span><span class="o">:</span><span class="s2">&quot;186&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;comments&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;session_id&quot;</span><span class="o">:</span><span class="s2">&quot;0b6d71c1324b3bfc68732caaa9315c27&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id23">
+<h3><span class="section-number">7.25.2. </span>Response Fields<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>string</p></td>
+<td><p>The title of the session</p></td>
+</tr>
+<tr class="row-odd"><td><p>comments</p></td>
+<td><p>string</p></td>
+<td><p>The comments by the user</p></td>
+</tr>
+<tr class="row-even"><td><p>user_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of the user</p></td>
+</tr>
+<tr class="row-odd"><td><p>session_id</p></td>
+<td><p>string</p></td>
+<td><p>The session id</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-all-user-sessions">
+<h2><span class="section-number">7.26. </span>GET ALL USER SESSIONS<a class="headerlink" href="#get-all-user-sessions" title="Link to this heading"></a></h2>
+<p>Gets all the saved sessions by a user along with the saved session state properties</p>
+<p>Type of Request: GET</p>
+<p>URL: <code class="code docutils literal notranslate"><span class="pre">http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/sessions/by-user/all?api_key=&lt;api_key&gt;&amp;user_id=&lt;user_id&gt;</span></code></p>
+<p>Query string parameters</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>api_key</p></td>
+<td><p>string</p></td>
+<td><p>Your API key</p></td>
+</tr>
+<tr class="row-odd"><td><p>user_id</p></td>
+<td><p>integer</p></td>
+<td><p>The id of user created by drupal</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id24">
+<h3><span class="section-number">7.26.1. </span>Example Response<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;comments&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;session_id&quot;</span><span class="o">:&lt;</span><span class="nx">session_id</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;layers&quot;</span><span class="o">:</span><span class="p">{},</span>
+<span class="w">    </span><span class="s2">&quot;filters&quot;</span><span class="o">:</span><span class="p">{</span>
+<span class="w">        </span><span class="s2">&quot;query&quot;</span><span class="o">:</span><span class="p">{</span>
+<span class="w">            </span><span class="s2">&quot;condition&quot;</span><span class="o">:</span><span class="s2">&quot;OR&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;rules&quot;</span><span class="o">:</span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                </span><span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="s2">&quot;genus&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;field&quot;</span><span class="o">:</span><span class="s2">&quot;genus&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;type&quot;</span><span class="o">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;input&quot;</span><span class="o">:</span><span class="s2">&quot;select&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;operator&quot;</span><span class="o">:</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;value&quot;</span><span class="o">:</span><span class="s2">&quot;Abies&quot;</span><span class="p">}</span>
+<span class="w">            </span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="s2">&quot;active_sources&quot;</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;zoom&quot;</span><span class="o">:</span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;pitch&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;bearing&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;center&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;lng&quot;</span><span class="o">:</span><span class="mf">24.851</span><span class="p">,</span><span class="s2">&quot;lat&quot;</span><span class="o">:</span><span class="mf">41.922</span><span class="p">},</span>
+<span class="w">    </span><span class="s2">&quot;created_at&quot;</span><span class="o">:</span><span class="s2">&quot;2019-07-01T19:08:32.010Z&quot;</span><span class="p">,</span><span class="s2">&quot;excluded_trees&quot;</span><span class="o">:</span><span class="p">{}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id25">
+<h3><span class="section-number">7.26.2. </span>Response Fields<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>string</p></td>
+<td><p>The title of the session</p></td>
+</tr>
+<tr class="row-odd"><td><p>comments</p></td>
+<td><p>string</p></td>
+<td><p>The comments of the session</p></td>
+</tr>
+<tr class="row-even"><td><p>session_id</p></td>
+<td><p>string</p></td>
+<td><p>The session id</p></td>
+</tr>
+<tr class="row-odd"><td><p>layers</p></td>
+<td><p>object</p></td>
+<td><p>The layers activated in this session</p></td>
+</tr>
+<tr class="row-even"><td><p>filters</p></td>
+<td><p>object</p></td>
+<td><p>The filters and active datasets</p></td>
+</tr>
+<tr class="row-odd"><td><p>zoom</p></td>
+<td><p>double</p></td>
+<td><p>Map zoom property</p></td>
+</tr>
+<tr class="row-even"><td><p>pitch</p></td>
+<td><p>double</p></td>
+<td><p>Map pitch proterty</p></td>
+</tr>
+<tr class="row-odd"><td><p>bearing</p></td>
+<td><p>double</p></td>
+<td><p>Map bearing property</p></td>
+</tr>
+<tr class="row-even"><td><p>center</p></td>
+<td><p>array of doubles</p></td>
+<td><p>Center of map [long, lat]</p></td>
+</tr>
+<tr class="row-odd"><td><p>created_at</p></td>
+<td><p>datetime</p></td>
+<td><p>Date the session was saved</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user.html" class="btn btn-neutral float-left" title="4. Users" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Opensource.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

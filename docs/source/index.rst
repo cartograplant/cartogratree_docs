@@ -1,0 +1,11 @@
+Cartograplant documentation
+==========================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Table of contents
+   :glob:
+   :numbered:
+
+   intro
+   user

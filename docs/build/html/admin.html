@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Administrators &mdash; cartogratree 7.x-0.1-dev documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=779bd379"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Users" href="user.html" />
+    <link rel="prev" title="1. Introduction" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cartogratree
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Administrators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">2.1. Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-drupal-module">2.1.1. Cartograplant Drupal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#library-dependencies">2.1.2. Library dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mapbox">2.1.3. Mapbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-api">2.1.4. Cartograplant API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">2.2. Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#groups">2.2.1. Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subgroups">2.2.2. Subgroups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#layers">2.2.3. Layers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fields">2.2.3.1. Fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#layer-permissions">2.2.3.2. Layer permissions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#get-layer-values">2.2.3.3. Get layer values</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#database-setup">3. Database setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#chado">3.1. Chado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trees">3.2. Trees</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ct-trees-all-view">3.2.1. ct_trees_all_view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ct-trees">3.2.2. ct_trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chado-ct-view">3.2.3. chado.ct_view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chado-new-geno-view">3.2.4. chado.new_geno_view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chado-new-pheno-view">3.2.5. chado.new_pheno_view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chado-plusgeno-view">3.2.6. chado.plusgeno_view</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.3. Layers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-layers">3.3.1. Cartograplant_layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-layer-permissions">3.3.2. Cartograplant_layer_permissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-fields">3.3.3. Cartograplant_fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-groups">3.3.4. Cartograplant_groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-subgroups">3.3.5. Cartograplant_subgroups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cartograplant-groups-subgroups">3.3.6. Cartograplant_groups_subgroups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sessions">3.4. Sessions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ct-sessions">3.4.1. ct_sessions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ct-user-sessions">3.4.2. ct_user_sessions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">4. Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html#analysis-panel">5. Analysis Panel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">6. Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html#cartograplant-api-reference">7. Cartograplant API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cartogratree</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>Administrators</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/admin.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="administrators">
+<h1><span class="section-number">2. </span>Administrators<a class="headerlink" href="#administrators" title="Link to this heading"></a></h1>
+<section id="installation">
+<h2><span class="section-number">2.1. </span>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Note: The following instructions assume that <strong>Cartograplant</strong> will be installed on a Linux server.</p>
+<section id="cartograplant-drupal-module">
+<h3><span class="section-number">2.1.1. </span>Cartograplant Drupal module<a class="headerlink" href="#cartograplant-drupal-module" title="Link to this heading"></a></h3>
+<p>Cartograplant is a module for <strong>Drupal 7</strong> CMS, dependent on the <strong>Tripal 7.x-3.x</strong>, <strong>TripalGalaxy 7.x-1.x</strong> modules, and <strong>GeoServer v2.11.2</strong>. Installation instructions for <a class="reference external" href="https://www.drupal.org/docs/7/install">Drupal 7</a>, <a class="reference external" href="https://tripal.readthedocs.io/en/latest/user_guide/install_tripal.html">Tripal</a>, and <a class="reference external" href="http://docs.geoserver.org/2.11.2/user/installation/index.html#installation">GeoServer</a> are available online. <strong>TripalGalaxy</strong> can be installed by cloning it from GitHub, in the <code class="code docutils literal notranslate"><span class="pre">sites/all/modules</span></code> directory of Drupal, and then enabling it with <code class="code docutils literal notranslate"><span class="pre">Drupal</span> <span class="pre">shell</span> <span class="pre">(drush)</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/tripal/tripal_galaxy.git
+$<span class="w"> </span>drush<span class="w"> </span>en<span class="w"> </span>tripal_galaxy
+</pre></div>
+</div>
+<p>Once these dependencies are installed, you can proceed with installing the <strong>Cartograplant</strong> module, in the <code class="code docutils literal notranslate"><span class="pre">sites/all/modules</span></code> directory of Drupal.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/TreeGenes/Cartogratree.git
+<span class="c1">## create Cartograplant directory and copy the module contents in it</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>Cartograplant
+$<span class="w"> </span>mv<span class="w"> </span>Cartograplant/drupal_module/*<span class="w"> </span>Cartograplant/
+<span class="c1">## remove the other Cartograplant components</span>
+$<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>Cartograplant/
+<span class="c1">## enable the module</span>
+$<span class="w"> </span>drush<span class="w"> </span>en<span class="w"> </span>Cartograplant
+</pre></div>
+</div>
+</section>
+<section id="library-dependencies">
+<h3><span class="section-number">2.1.2. </span>Library dependencies<a class="headerlink" href="#library-dependencies" title="Link to this heading"></a></h3>
+</section>
+<section id="mapbox">
+<h3><span class="section-number">2.1.3. </span>Mapbox<a class="headerlink" href="#mapbox" title="Link to this heading"></a></h3>
+<p><strong>Cartograplant</strong> uses <strong>Mapbox</strong>, a mapping software, for creation of its base map and to host some of its layers as tilesets. <strong>Cartograplant</strong> uses the <strong>MapboxGL JS</strong> library to add layers and data to the map.</p>
+<p>The MapBox GL JS API reference can be found here: <a class="reference external" href="https://docs.mapbox.com/mapbox-gl-js/api/">https://docs.mapbox.com/mapbox-gl-js/api/</a></p>
+<p>To use Mapbox, you first need to create an account and get an access token.</p>
+</section>
+<section id="cartograplant-api">
+<h3><span class="section-number">2.1.4. </span>Cartograplant API<a class="headerlink" href="#cartograplant-api" title="Link to this heading"></a></h3>
+<p>A final dependency for the <strong>Cartograplant</strong> Drupal module is the <strong>Cartograplant API</strong>. This in turn depends on <strong>NodeJs v8.11.2</strong>, <strong>NPM v5.6.0</strong>, and <strong>PM2</strong>. This API also uses the modules <strong>mem-cache</strong>, <strong>cors</strong>, <strong>pg</strong>, <strong>body-parser</strong>, and <strong>response-time</strong>. To install the <strong>Cartograplant API</strong> follow these steps:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">## create a directory for this API</span>
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>Cartograplant/api
+<span class="c1">## copy the API files into in</span>
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/TreeGenes/Cartograplant.git
+$<span class="w"> </span>mv<span class="w"> </span>Cartograplant/NodeJsAPI/*<span class="w"> </span>Cartograplant/api/
+<span class="c1">## remove the other Cartograplant components</span>
+$<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>Cartograplant/
+<span class="c1">## replace the values for host, port, database, user, and password in query.js</span>
+<span class="c1">## install the express module</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>Cartograplant/api
+$<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>express<span class="w"> </span>pg<span class="w"> </span>--save
+<span class="c1">## install PM2 and run it as a service</span>
+$<span class="w"> </span>sudo<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>pm2@latest<span class="w"> </span>-g
+$<span class="w"> </span>sudo<span class="w"> </span>pm2<span class="w"> </span>startup<span class="w"> </span>systemd
+<span class="c1">## confirm that it&#39;s running</span>
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>pm2-root.service
+<span class="c1">## start Cartograplant API and add it to PM2&#39;s process list</span>
+$<span class="w"> </span>pm2<span class="w"> </span>start<span class="w"> </span>Cartograplant_api
+<span class="c1">## to [stop|start|restart|get info] run:</span>
+$<span class="w"> </span>pm2<span class="w"> </span><span class="o">[</span>stop<span class="p">|</span>start<span class="p">|</span>restart<span class="p">|</span>info<span class="o">]</span><span class="w"> </span>Cartograplant_api
+</pre></div>
+</div>
+</section>
+</section>
+<section id="configuration">
+<h2><span class="section-number">2.2. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>Go to your Drupal website and navigate to <code class="code docutils literal notranslate"><span class="pre">admin/Cartograplant/settings</span></code>. From this page you can set up the URLs for the GIS and API servers (<code class="code docutils literal notranslate"><span class="pre">admin/Cartograplant/settings/servers/edit</span></code>), <strong>add|edit|delete</strong> groups and subgroups for organizing the layers, and <strong>add|edit|delete|set access permissions</strong> for layers. For environmental layers, you can also get the values at the locations of the trees.</p>
+<section id="groups">
+<h3><span class="section-number">2.2.1. </span>Groups<a class="headerlink" href="#groups" title="Link to this heading"></a></h3>
+<p>For groups, two values are required: <strong>Group name</strong> and <strong>Group rank</strong>. The <strong>Group name</strong> will be displayed on <code class="code docutils literal notranslate"><span class="pre">Cartograplant</span></code> page, and the <strong>Group rank</strong> determines the location in the list for this gror up (the lower the rank the higher in the list).</p>
+</section>
+<section id="subgroups">
+<h3><span class="section-number">2.2.2. </span>Subgroups<a class="headerlink" href="#subgroups" title="Link to this heading"></a></h3>
+<p>For subgroups, only one value is required: <strong>Subgroup name</strong>. Once created, a subgroup can be added to one or more groups. The <strong>Subgroup name</strong> will be displayed on <code class="code docutils literal notranslate"><span class="pre">Cartograplant</span></code> page, based on the rank assigned in the group.</p>
+</section>
+<section id="layers">
+<h3><span class="section-number">2.2.3. </span>Layers<a class="headerlink" href="#layers" title="Link to this heading"></a></h3>
+<p>Once the groups and subgroups are defined, the layers can be added to Cartograplant. The layer page prompts for the following values:</p>
+<ul class="simple">
+<li><p><strong>Human-readable name</strong>: this is the name shown to the Cartograplant users. Make sure it is descriptive, and uniquely identifies the layer.</p></li>
+<li><p><strong>Machine name</strong>: this is the name used by the GIS server.</p></li>
+<li><p><strong>URL</strong>: the location from where this layer was downloaded.</p></li>
+<li><p><strong>Trees layer[yes|no]</strong>: tree layers are shown on top of the environmental layers.</p></li>
+<li><p><strong>Group name</strong> and <strong>Subgroup name</strong>, discussed above.</p></li>
+<li><p><strong>Layer rank</strong>: the order in which layers within a subgroup are listed. If from worldclim for example, then the layer ranks will range from 1-12 corresponding with the months January - December.</p></li>
+<li><p><strong>Fields</strong>: which fields from this layer are <em>exposed</em> to the users (described below).</p></li>
+</ul>
+<p>The machine name is defined by you when you add and publish the layer to geoserver.
+For adding mapbox layers log in to your mapbox account and go to: <a class="reference external" href="https://studio.mapbox.com/tilesets/">https://studio.mapbox.com/tilesets/</a>. Convert your layer to one of the accepted formats, add it as a tileset, then go to <a class="reference external" href="https://studio.mapbox.com/">https://studio.mapbox.com/</a>, select the style of your base map or create a new one. Then click on the ‘Add Layer’ button at the top left of the screen and select your tileset as the source.</p>
+<section id="fields">
+<h4><span class="section-number">2.2.3.1. </span>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><strong>Field name</strong>: this is the name returned by the GIS server.</p></li>
+<li><p><strong>Display name</strong>: this is the name shown to the users.</p></li>
+<li><p><strong>Filter[yes|no]</strong>: whether to allow the users to filter the data based on this field’s values.</p></li>
+<li><p><strong>Filter type[continuous|discrete]</strong>: the types of values present in this field.</p></li>
+<li><p><strong>Precision used with continuous values</strong></p></li>
+<li><p><strong>Mask value</strong>: value returned by layer that should be replaced.</p></li>
+<li><p><strong>Mask display</strong>: text shown to user for masked values.</p></li>
+<li><p><strong>Pop-up</strong> whether this field should be shown in the pop-up window, when the user clicks on the map.</p></li>
+<li><p><strong>Field rank</strong>: the order in which fields within a layer are listed.</p></li>
+</ul>
+</section>
+<section id="layer-permissions">
+<h4><span class="section-number">2.2.3.2. </span>Layer permissions<a class="headerlink" href="#layer-permissions" title="Link to this heading"></a></h4>
+<p>Using this form, administrators can control which users or Drupal roles can access each layer.</p>
+</section>
+<section id="get-layer-values">
+<h4><span class="section-number">2.2.3.3. </span>Get layer values<a class="headerlink" href="#get-layer-values" title="Link to this heading"></a></h4>
+<p>Using this form, administrators can extract the values from an environmental layer at the locations with geo-referenced trees, and then save these values in the database.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="database-setup">
+<h1><span class="section-number">3. </span>Database setup<a class="headerlink" href="#database-setup" title="Link to this heading"></a></h1>
+<p>Cartograplant and its API depend on several tables and materialized views. Their schemas are shown below. If the images are too small and hard to see, right click -&gt; ‘View Image’ will give you the full image resolution.</p>
+<section id="chado">
+<h2><span class="section-number">3.1. </span>Chado<a class="headerlink" href="#chado" title="Link to this heading"></a></h2>
+<p>Chado is a db schema optimized for genomic data. Cartograplant makes use of several chado tables to store and receive its data. Read about it more here: <a class="reference external" href="http://www.gmod.org/wiki/Chado_Manual">http://www.gmod.org/wiki/Chado_Manual</a></p>
+</section>
+<section id="trees">
+<h2><span class="section-number">3.2. </span>Trees<a class="headerlink" href="#trees" title="Link to this heading"></a></h2>
+<section id="ct-trees-all-view">
+<h3><span class="section-number">3.2.1. </span>ct_trees_all_view<a class="headerlink" href="#ct-trees-all-view" title="Link to this heading"></a></h3>
+<p>This is the main view used to populate the map with tree data. It’s a view that is created from joining multiple tables to allow for greater read access speed.</p>
+<img alt="_images/ct_trees_all_des.png" class="align-center" src="_images/ct_trees_all_des.png" />
+</section>
+<section id="ct-trees">
+<h3><span class="section-number">3.2.2. </span>ct_trees<a class="headerlink" href="#ct-trees" title="Link to this heading"></a></h3>
+<p>This is the table which is used by ct_trees_all_view to cross reference the trees with their genomic and phenotypic data. It contains all the trees.</p>
+<img alt="_images/ct_trees_des.png" class="align-center" src="_images/ct_trees_des.png" />
+</section>
+<section id="chado-ct-view">
+<h3><span class="section-number">3.2.3. </span>chado.ct_view<a class="headerlink" href="#chado-ct-view" title="Link to this heading"></a></h3>
+<p>This is the main view that houses the trees submitted through TPPS. It uses join conditions on tables such as chado.stock and chado.stockprop to build each record.</p>
+<img alt="_images/ct_view_des.png" class="align-center" src="_images/ct_view_des.png" />
+</section>
+<section id="chado-new-geno-view">
+<h3><span class="section-number">3.2.4. </span>chado.new_geno_view<a class="headerlink" href="#chado-new-geno-view" title="Link to this heading"></a></h3>
+<p>This view contains tree genotype records.</p>
+<img alt="_images/new_geno_view_des.png" class="align-center" src="_images/new_geno_view_des.png" />
+</section>
+<section id="chado-new-pheno-view">
+<h3><span class="section-number">3.2.5. </span>chado.new_pheno_view<a class="headerlink" href="#chado-new-pheno-view" title="Link to this heading"></a></h3>
+<p>This view contains tree phenotype records.</p>
+<img alt="_images/pheno_view_des.png" class="align-center" src="_images/pheno_view_des.png" />
+</section>
+<section id="chado-plusgeno-view">
+<h3><span class="section-number">3.2.6. </span>chado.plusgeno_view<a class="headerlink" href="#chado-plusgeno-view" title="Link to this heading"></a></h3>
+<p>This view contains tree publication records.</p>
+<img alt="_images/plusgeno_view_des.png" class="align-center" src="_images/plusgeno_view_des.png" />
+</section>
+</section>
+<section id="id1">
+<h2><span class="section-number">3.3. </span>Layers<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>The layers tables are important for the administration side because they are what decide which layers are available and useable to the user.</p>
+<section id="cartograplant-layers">
+<h3><span class="section-number">3.3.1. </span>Cartograplant_layers<a class="headerlink" href="#cartograplant-layers" title="Link to this heading"></a></h3>
+<img alt="_images/ct_layers_des.png" class="align-center" src="_images/ct_layers_des.png" />
+</section>
+<section id="cartograplant-layer-permissions">
+<h3><span class="section-number">3.3.2. </span>Cartograplant_layer_permissions<a class="headerlink" href="#cartograplant-layer-permissions" title="Link to this heading"></a></h3>
+<img alt="_images/ct_layer_permissions_des.png" class="align-center" src="_images/ct_layer_permissions_des.png" />
+</section>
+<section id="cartograplant-fields">
+<h3><span class="section-number">3.3.3. </span>Cartograplant_fields<a class="headerlink" href="#cartograplant-fields" title="Link to this heading"></a></h3>
+<img alt="_images/ct_fields_des.png" class="align-center" src="_images/ct_fields_des.png" />
+</section>
+<section id="cartograplant-groups">
+<h3><span class="section-number">3.3.4. </span>Cartograplant_groups<a class="headerlink" href="#cartograplant-groups" title="Link to this heading"></a></h3>
+<img alt="_images/ct_groups_des.png" class="align-center" src="_images/ct_groups_des.png" />
+</section>
+<section id="cartograplant-subgroups">
+<h3><span class="section-number">3.3.5. </span>Cartograplant_subgroups<a class="headerlink" href="#cartograplant-subgroups" title="Link to this heading"></a></h3>
+<img alt="_images/ct_subgroups_des.png" class="align-center" src="_images/ct_subgroups_des.png" />
+</section>
+<section id="cartograplant-groups-subgroups">
+<h3><span class="section-number">3.3.6. </span>Cartograplant_groups_subgroups<a class="headerlink" href="#cartograplant-groups-subgroups" title="Link to this heading"></a></h3>
+<img alt="_images/ct_groups_subgroups_des.png" class="align-center" src="_images/ct_groups_subgroups_des.png" />
+</section>
+</section>
+<section id="sessions">
+<h2><span class="section-number">3.4. </span>Sessions<a class="headerlink" href="#sessions" title="Link to this heading"></a></h2>
+<p>Session tables must also be created to store logged in user and anonymous user sessions.</p>
+<section id="ct-sessions">
+<h3><span class="section-number">3.4.1. </span>ct_sessions<a class="headerlink" href="#ct-sessions" title="Link to this heading"></a></h3>
+<img alt="_images/ct_sessions_des.png" class="align-center" src="_images/ct_sessions_des.png" />
+</section>
+<section id="ct-user-sessions">
+<h3><span class="section-number">3.4.2. </span>ct_user_sessions<a class="headerlink" href="#ct-user-sessions" title="Link to this heading"></a></h3>
+<img alt="_images/ct_user_sessions_des.png" class="align-center" src="_images/ct_user_sessions_des.png" />
+<p>Ones all these tables and views have been created in your PostgreSQL databse, then go to the API directory of the project and with your favorite text editor edit query.js</p>
+<p>Input the necessary values for the following configuration fields in query.js</p>
+<div class="highlight-JavaScript notranslate"><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">conf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">host</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">host</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">port</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">database</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">database_name</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">username</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">password</span><span class="o">:</span><span class="w"> </span><span class="o">&lt;</span><span class="nx">password</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="1. Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="user.html" class="btn btn-neutral float-right" title="4. Users" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Opensource.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

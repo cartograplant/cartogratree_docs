@@ -1,0 +1,1617 @@
+Developer Documentation
+=======================
+
+About
+^^^^^
+Cartograplant was built with CSS3, HTML5, JavaScript, PHP 7.0.29, and PSQL 9.2.15. The libraries and frameworks used include: Mapbox GL JS 1.0.0, Bootstrap 4.0.0, and JQuery 2.2.4. You should also be familiar with Git to commit and push changes. Understanding Mapbox and Drupal is a good starting point before diving deep into the project.
+
+If you want to read about the motivations and future plans for the project read this paper: https://docs.google.com/document/d/1y4-KwPzZfSC6bzHZlhFI627cLPwfz0H3ogZUb_XQeMs
+
+Before anything else, make sure you have sudo access in the server where Cartograplant is running and admin privileges in the Drupal website where Cartograplant is being developed. Although not required these extra privileges will make development much easier. 
+You should have a GitLab account to be able to contribute to the codebase, Geoserver and Mapbox accounts to view the layers, a TreeSnap account with a valid API key to request TreeSnap data, and an account in the Drupal website where Cartograplant is installed to be able to log in and test the changes.
+
+Coding style specifications
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+It helps to maintain consistency in code to make maintainability of the codebase much easier. Some coding guidelines for developing Cartograplant:
+
+- Tabs are 4 spaces, indent using tabs not spaces
+- Starting curly brace should be in the same line, while ending curly brace in their own line
+- Don't add in-line comments for the sake of adding comments, only do so if an explanation is necessary. The names of functions or variables should be enough in some cases, if they were named appropriately.
+- HTML ids and classes delimited by '-'
+- In PHP only use single quotes unless necessary
+- Try to use Tripal API functions instead of Drupal ones
+- In JavaScript single and double quotes are interchangeable, but try to keep it consistent
+- Only use ternary operators if it could fit in a single line or less
+- Class names should be capitalized
+- Variables
+    - Should describe what the variable is
+    - No one letter variable names unless used for loops or temporary variables
+    - Should be short and sweet
+    - For PHP and NodeJS we use underscore, and for front-end JavaScript we use camelCase
+    - Try to avoid using global variables
+- Functions
+    - Don't repeat yourself
+    - Don't make functions too long
+    - Ideally a function should only do one thing
+    - Try to be as descriptive in the name as possible, but not too long that it becomes a pain to type or refer back to
+    - For PHP and NodeJS we use underscore, and for front-end JavaScript we use camelCase
+    - Minimize vertical distance for functions such that functions that use each other are close to each other in the top-down view of the program
+- Any tokens or API keys should not be exposed to the public and ideally should be stored in a configuration file or as environmental variables
+    
+
+
+Project Structure
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: CSS
+
+    - drupal_module
+        - Cartograplant.info
+        - Cartograplant.install
+        - js
+            - main.js
+            - map.js
+        - styling
+            - main.css
+        - includes
+            - Cartograplant_admin_get_environmental_values.js
+            - Cartograplant.admin.inc
+            - Cartograplant.user.inc
+        - theme
+            - templates
+                - page--Cartograplant.tpl.php
+                - resources_imgs
+                - trees_imgs
+                - ui_icons_imgs
+            - Cartograplant_theme.inc
+        - Cartograplant.module
+    - NodeJSAPI
+        - Cartograplant_api.js
+        - query.js
+        - routes.js
+        - controllers
+            - treeController.js
+            - userController.js
+            - oldController.js
+        - package.json
+        - README.md
+    - galaxy_workflows
+    - LICENSE
+    - README.md
+    - CHANGELOG.md
+
+The Cartograplant--page.tpl.php contains the basic HTML layout of the page.
+The map.js file contains the majority of the code for controlling the map and any map interactions.
+The Cartograplant.module is the heart of the Drupal program and controls what happens on page load.
+
+Modifying any changes to the files will usually allow you to view the effects on refresh of the page, but in the event it doesn't try clearing the cache by typing the following command in the terminal:
+
+.. code-block:: HTML
+
+    drush cc all
+
+Mapbox
+^^^^^^
+Mapbox is a platform for hosting and editing map styles. It also offers libraries and frameworks for creating web-based mapping applications. Cartograplant uses Mapbox GL JS to display its base map and serve some of its layers.
+Cartograplant's base map along with the composited layers can be found here: https://api.mapbox.com/styles/v1/snkb/cjrgce15209bi2spi9f2ddvch.html?fresh=true&title=true&access_token=pk.eyJ1Ijoic25rYiIsImEiOiJjanFtZXpkbmkzc2cyM3hsYjJ3dDhtYnp5In0.suo54ZuchrNHspBirQ8drA#4.05/40.54/-96.66
+
+In case you're stuck on something Mapbox related a good place to start is the documentation, which you can find here: https://docs.mapbox.com/mapbox-gl-js/api/
+
+TreeSnap
+^^^^^^^^
+Cartograplant works in collaboration with TreeSnap and their mobile application which relies on citizen scientists to submit trees they encounter in nature. To use the TreeSnap API you must first create a TreeSnap account and get a bearer token which will be used to authenticate API requests.
+Create a TreeSnap account then go to https://treesnap.org/developer to generate your tokens for use.
+Documentation for the TreeSnap API and what data you can request can be found at: https://github.com/statonlab/Treesnap-website/wiki/Observations-Web-Service
+
+BIEN
+^^^^
+Cartograplant also works in collaboration with the Botanical Information and Ecology Network's dataset. The BIEN working group has been working since 2008 toward bringing together disparate networks of botanical researchers and integrating global botanical observation data. This observational data is pulled into Cartograplant for further research and analysis. Please have a look at Cartograplant's API function list for more information on related BIENv4 features.
+Currently Cartograplant supports two main observation sub datasets from BIENv4 - tree observations and endangered taxa.
+
+Adding a new Tree Dataset source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The tree dataset sources on the map are loaded as GeoJSON files received from an API endpoint. GeoJSON is a format for encoding a variety of geographic data structures. The GeoJSON returned must be a list of features with valid longitude and latitude coordinates and a unique id.
+All of the trees are stored in a single table where each record has a <source_id> column. 
+Cartograplant currently supports three sources, where TreeGenes = 0, TreeSnap = 1, DataDryad = 2 and BIEN = 3 for source ids. Currently the dataset layer, which encompasses the three sources mentioned beforehand, is composed of three layers.
+The first layer, which is the outermost layer, is the cluster text layer. This displays how many trees there are in this cluster. The 2nd top most level layer is the cluster layer itself, which is just a circle symbol on the map with varying sizes and colors. The last layer is for the individual points which are represented by tree icons and only appear when the user is zoomed in.
+
+An example GeoJSON feature collection array
+
+.. code-block:: JavaScript
+
+    {"type":"FeatureCollection",
+        "features":[
+            {"type":"Feature","properties":{"icon_type":1,"id":"ABAL0001"},"geometry":{"type":"Point","coordinates":[10.8377888,45.9715095]}},
+            {"type":"Feature","properties":{"icon_type":1,"id":"ABAL0002"},"geometry":{"type":"Point","coordinates":[10.8380944,45.9715108]}}
+        ]
+    }
+
+The <id> in the properties object identifies a single tree.
+The <icon_type> property signifies which icon the tree will have displayed on the map to represent it. Currently there are six icon types, where exact/approximate refers to the confidence level of the location of the tree.
+
+.. code-block:: HTML
+
+    0 = Angiosperm exact
+    1 = Gymnosperm exact
+    2 = Angiosperm approximate
+    3 = Gymnosperm approximate
+    4 = TreeSnap angiosperm
+    5 = TreeSnap gymnosperm
+
+To read more about GeoJSON and how to optimize it for large datasets: https://docs.mapbox.com/help/troubleshooting/working-with-large-geojson-data/
+
+Adding Geoserver Tileset layers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Our latest version of Cartograplant uses a mixture of both geoJSON layers and Geoserver tileset layers to display datasets. For example, the new BIEN layer is a Geoserver tileset layer.
+In order to add Geoserver tileset layers, it is important to name it and also append '_geoserver_tileset' within the Javascript code particularly for the global 
+variable datasetKey which holds the corresponding source_ids of each layer and the datasetGeoserverLayerConfig which holds the raw Geoserver layer name for the dataset 
+and other required settings. It is also important to edit the theme file page--Cartograplant.tpl.php which contains the dataset toggle buttons and set an id for the new 
+dataset in the form of <name>_geoserver_tileset-data.
+
+Customizing icons on the map that represent the points
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The different icon_types differentiate between approximate and exact coordinates of the georeferenced trees, the plant group that the tree belongs to, as well as the data source. 
+TreeSnap's trees implement some sort of coordinate obsfucation as some of the trees recorded are on private property.
+
+To add your own icons, first the icons must be chosen. You can either choose from some of mapbox's `icons <https://labs.mapbox.com/maki-icons/>`_ and add them to your base map using mapbox studio, or add your own images to the project directory and linking them yourself.
+
+Adding your own icons to mapbox
+
+.. code-block:: JavaScript
+
+    map.loadImage(<image_path>, 
+        function (error, <image_var_name>) {
+            map.addImage(<image_name_to_reference>, <image_var_name>);
+        }
+    )
+
+To match the trees with their icon a mapbox matching expression is used.
+
+.. code-block:: JavaScript
+
+    [
+        "match",
+        ["get", <icon_property_name>],
+        <icon_property_value>,   
+        <image_name_to_reference>,
+        <icon_property_value>,   
+        <image_name_to_reference_2>,
+        <default_image_name_to_reference>,
+    ];
+
+If keeping the trees intact, then you can simply replace the images located in the :code:`theme/templates/trees_imgs` directory with your new tree images.
+
+Filtering using a Query Builder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The main.js file located in the /js directory contains the starter code for the filter options available to the user. The ruleBasic variable below indicates what is the first filter option shown to the user on load.
+The <condition> denotes the starting selected condition for this query. The <condition> parameter can either be 'AND' or 'OR'.
+
+.. code-block:: JavaScript
+
+    var rulesBasic = {
+		condition: 'AND',
+		rules: [
+		    {
+			    id: 'family',
+			    operator: 'equal',
+		    }, 
+		]
+	};
+
+The filtersList variable contains all of the filters declared and that are available to the user right now. Each filter is composed of several properties. The <id> indicates the field of the selection and must be unique, the <label> is the name shown to the user, <input> is the type of form being used.
+The <values> is the available options for this select dropdown, it's composed of key/value pairs. This is dynamically populated on page load. The <operators> is the array of clauses that is available for this option.
+
+
+.. code-block:: JavaScript
+
+    var filtersList = [
+		{
+			id: 'family',
+			label: 'Family',
+			type: 'string',
+			input: 'select',
+			values: {},
+			operators: ['equal', 'not_equal']
+		},
+		...
+    ]
+
+To get the filters chosen by the user we select the element that contains the filter form and call the queryBuilder function: $('#builder').queryBuilder('getRules');
+This returns a json object, which we pass to the API and the API parses it, generates a sql query, then returns back the result of the query.
+
+An example json that can result from a filter selection
+
+.. code-block:: JavaScript
+
+    {
+      "condition": "AND",
+      "rules": [
+        {
+          "id": "family",
+          "field": "family",
+          "type": "string",
+          "input": "select",
+          "operator": "equal",
+          "value": "Pinaceae"
+        },
+        {
+          "condition": "AND",
+          "rules": [
+            {
+              "id": "genus",
+              "field": "genus",
+              "type": "string",
+              "input": "select",
+              "operator": "equal",
+              "value": "Pinus"
+            },
+            {
+              "id": "marker_type",
+              "field": "marker_type",
+              "type": "string",
+              "input": "select",
+              "operator": "equal",
+              "value": "SNP"
+            }
+          ]
+        }
+      ]
+    }
+
+Parsing
+-------
+
+The filters chosen by the user can be as deep as the user wants, so a recursive function that simulates a depth first search approach is used to parse the resulting json object. We go through each filter, and if we encounter a filter that is an object we go one level deeper. We use paranthesis to separate between groups of filters.
+
+The resulting query from the example json above would look like: 
+
+.. code-block:: SQL
+
+    SELECT * FROM some_table WHERE (family = 'Pinaceae') AND (genus = 'Pinus' AND marker_type = 'SNP');
+
+Updating the NodeJS API
+^^^^^^^^^^^^^^^^^^^^^^^
+The NodeJS express API is composed of four major parts. The Cartograplant_api.js is the main file, declares the necessary dependency modules and starts everything. Then there's the routes.js file which defines all the current available API endpoints. Adding a new endpoint is fairly trivial. Then there's the query.js file which defines the connection to the database and what gives the API access and ability to get data from the tables.
+
+.. code-block:: JavaScript
+
+    app.<operation>('/Cartograplant/api/<version>/<path>', <controller>.<function_name>);
+
+Here the <operation> refers to GET, POST, PUT, etc operations. The <version> refers to the API's current version, right now Cartograplant is at version 2. This version number should remain a whole number just by convention. 
+
+Lastly, there are the controllers which receive the requests handled by the routes. The controllers must be first imported into the routes.js file to be able to refer to them. 
+The general format for a controller function that handles an API call is:
+
+.. code-block:: JavaScript
+
+    exports.<function_name> = function(req, res, next) {
+        do stuff
+        res.status(<status_code>).json(<some_result>);
+        return;
+    }
+
+To see your changes take effect, you need to restart the API.
+If using systemd to manage the api:
+
+The command: :code:`sudo systemctl restart Cartograplant_api` restarts the API. 
+
+To see the current status of the API do: :code:`sudo systemctl status Cartograplant_api`
+
+If you are using the :code:`node` command:
+
+The command: :code:`node Cartograplant_api &` will start the server for the API in the background
+
+To stop it: Find the process id of the the program  using :code:`ps aux | grep node` and kill it using :code:`kill -9 <node_process_id>`
+
+Using :code:`node` to run the server is recommended as it allows you to see a more detailed error message.
+
+To view debugging output: :code:`node Cartograplant_api` on the console.
+
+Extracting tree data
+^^^^^^^^^^^^^^^^^^^^
+When a user clicks on a point, we can grab the features within that click point.
+
+.. code-block:: JavaScript
+
+    map.on('click', function (e) {  
+        //create a bounding box around the clicked point, to be used to query for features/trees around the bbox
+        var treesBbox = [
+            [e.point.x, e.point.y],
+            [e.point.x, e.point.y]
+        ];   
+
+        var features = map.queryRenderedFeatures(treesBbox, {
+            layers: [<layer_names>]
+        }); 
+
+Using the features, we can find the properties of the points at the clicked location and from the properties find the id of the trees. Then we make an API call where we pass in the tree_id to get the information we need and want to display.
+For TreeSnap trees, we need to also communicate with their API to get the data and images we need.
+
+This is what a typical result looks like when querying features of a clicked point
+
+.. code-block:: JavaScript
+
+    [
+      {
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -122.97992706298828,
+            40.19228260049829
+          ]
+        },
+        "type": "Feature",
+        "properties": {
+          "id": "FS0085",
+          "icon_type": 1
+        },
+        "layer": {
+          "id": "tree-points",
+          "type": "symbol",
+          "source": "trees",
+          "filter": [
+            "!",
+            [
+              "has",
+              "point_count"
+            ]
+          ],
+          "layout": {
+            "icon-image": [
+              "match",
+              [
+                "get",
+                "icon_type"
+              ],
+              0,
+              "angiosperm_ex",
+              1,
+              "gymnosperm_ex",
+              2,
+              "angiosperm_app",
+              3,
+              "gymnosperm_app",
+              4,
+              "treesnap_angio",
+              5,
+              "treesnap_gymno",
+              "angiosperm_ex"
+            ],
+            "icon-size": 0.04,
+            "icon-allow-overlap": true
+          }
+        },
+        "source": "trees",
+        "state": {}
+      },
+      ...
+    ]
+
+Here the tree_id of the first point in the clicked area is "FS0085".
+After making a call to the API and passing in this tree_id this should be the response
+
+.. code-block:: JavaScript
+
+    {
+    "uniquename":"FS0085",
+    "genus":"Pinus",
+    "species":"Pinus balfouriana",
+    "subkingdom":"gymnosperm",
+    "family":"Pinaceae",
+    "latitude":40.1922833333333,"longitude":-122.979933333333,
+    "coordinate_type":0,
+    "source_id":0,
+    "icon_type":1,
+    "tree_num":1486
+    }
+
+
+Extracting layer data
+^^^^^^^^^^^^^^^^^^^^^
+Mapbox layers are composited into the map, so we can get the environmental data at a clicked point just by looking at the properties of the layers around the clicked point. For geoserver layers we must get the data using GetFeatureInfo. For more information: https://docs.geoserver.org/latest/en/user/tutorials/GetFeatureInfo/index.html
+
+Getting the environmental data around a clicked point is done by making an ajax call to an endpoint similar to this one:
+
+:code:`https://tgwebdev.cam.uchc.edu/geoserver/wms?SERVICE=WMS&VERSION=1%2E3%2E0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=<layer_name>&LAYERS=<layer_name>&INFO_FORMAT=application%2Fjson&I=128&J=128&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&STYLES=&BBOX=[[X1, Y1], [X2, Y2]]`
+
+Where <layer_name> is the name of the layer that takes a form of a string 
+BBOX is the bounding box and takes the form of an array
+
+
+Adding and Removing layers from the map
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The layers of Cartograplant are hosted in both geoserver and mapbox. Adding raster layers to the base map on mapbox doesn't seem to give good results, at least not from the layers we have, and the most success seems to come from converting the layer to GeoJSON using something like QGIS and generating tile sets based on the GeoJSON.
+To add a mapbox layer to the map that has already been composited to the base map, we merely need to change the layer's visibility settings. 
+
+Mapbox has a library for converting GeoJSON data to vector tilesets: https://github.com/mapbox/tippecanoe
+
+To learn more about combining layers: https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/#combine-layers.
+
+Adding layer filters for environmental layers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We've introduced 2 available environmental layer filters which use different concepts.
+
+1. Color filters
+2. Year filters.
+
+To enable color filters for environmental layers, you can visit the Cartograplant Admin UI at admin/Cartograplant/settings and either create or edit a layer. You can enable the color filter by checking the checkbox labeled 'Allow user to select/change colors via the map interface?'. This will add a color picker user interface option when a user selects an environmental layer and allow users to change the color of this layer in realtime.
+
+To enable year filters for environmental layers, visit the Cartograplant Admin UI and add or edit a layer. You will see a checkbox labeled Allow user to filter by year range via the map interface?. Make sure to select this checkbox and also ensure that you set the additional fields such as Year range geoserver parameter, Year range starting year and Year range ending year.
+The year range geoserver parameter is the paramater used to filter the year range and is usually specific to the fields embedded in a layer (within Geoserver). Currently this filter is only compatible with year data that is stored as integers and will not work properly if the field is saved as a string in Geoserver.
+The start and ending year field limits the UI slider to only select years between these years.
+
+Adding layer legend box HTML
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can also provide custom information for each environmental layer which will then be available to users by utilizing the Layer Legend HTML field.
+You can access this field by going to the Cartograplant Admin UI at admin/Cartograplant/settings and adding or editing a layer. You should be able to see the Layer Legend HTML text area. You can enter plain text or HTML text in this text area. Users will be able to view this information by clicking on the blue info (i) icon when they enable a layer.
+
+
+Contributing To Analysis Panels
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Workflows run in the analysis panel are handled by NextFlow. NextFlow is a workflow manager that enables the writing of scripts in a way that is easy to read, write and reproduce analysis.
+
+documentation: `Page<https://www.nextflow.io/docs/latest/overview.html>`_
+framework: `Page<https://nf-co.re/docs/usage/getting_started/introduction>`_
+
+
+The scripts follow DSL2 syntax logic and run on the mantis server. The Workflows get pulled by ng-nginx and are stored in ~/.nextflow/assets folder.
+
+Each tab in the Analysis panel UI has a dedicated workflow. Workflows and tabs are based on the type of processes/analysis being run. The types of processes are:
+
+1. Study Selection
+2. Phenotypic Selection 
+3. Genotypic Selection (Workflow)
+4. Variant Filtering (Workflow)
+5. Population Structure (Workflow)
+6. Genome-wide Association (Workflow)
+
+Generating analysis tables and passing to Sambada
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Marker type and environmental value tables are created, written to a file and submitted to a galaxy workflow to perform analysis. Sambada is the framework used for landscape genomics analysis.
+To generate the marker types table, which will be entirely composed of SNP, we get all the markers from the trees selected that are of the SNP type. We store all the available SNP markers into a set, then go through each of the SNPs in the set and cross reference with the SNP markers that the current tree has.
+If the current SNP from the entire dataset chosen does not exist for the current tree, then we set the cell value to 'NaN' otherwise we set it to whatever correspondin value the tree has based on homogyneous and heterogyneuos from reference.
+We perform some further array operations on the resulting 2D array which simulates the table to generate a chart for it using D3js. The user can further filter the SNP table using the generated chart filter options.
+
+For the environmental value table we collect all the tree_ids of the selected trees, and create a mapping of coordinate location to array of tree_ids in that location. Then we go through all the keys of the mapping, which will be of an array of coordinates, and extract the environmental values based on the activated layers.
+
+We write the final arrays generated into a CSV file, and send to the galaxy Sambada workflow using the Tripal Galaxy API.
+To check for results and whether an analysis has been completed, the Tripal Galaxy API functions were used.
+
+
+Saving and loading sessions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Based on the session_id provided in the url, if the session_id is valid then all session related data from that session is loaded to the map on page load. The session_data is requested from the API and takes the form of a JSON object. 
+Logged in users have access to all their saved sessions and can load or delete any one of them as they wish. Saving sessions is entirely under the user's control, if the user is not logged in then the session data is saved, and if the user is logged in then the user's session identification parameters such as title and comments are also saved.
+The complex items such as leyers and filters applied are saved as jsonb data types, while the other values are saved as more primitive sql data types.
+
+
+Cartograplant API Reference
+========================== 
+
+Cartograplant communicates with its own API to send and request data. To gain access to this API, first create a TreeGenes account and generate an API key. The API contains both normal user level API functions as well as administrative API functions. The API key is required for normal user-level API usage such as accessing tree information while the asup key is needed to performan administrative functions such as clearing the cache.
+
+CONFIGURATION
+^^^^^^^^^^^^^
+
+The latest version of Cartograplant API (NodeJS) uses configuration settings within the config.js file.
+
+The most relevant configuration variable in relation to the Cartograplant API is the asup key which is an abbreviation for api_superuser_password.
+
+You must set this password appropriately in order to perform administrative level API functions such as remove_treegenes_trees, reload_trees and reload_trees_status.
+
+
+ADMIN API FUNCTIONS
+^^^^^^^^^^^^^^^^^^^
+The functions below require the ?asup= get variable in order to execute.
+
+REMOVE TREEGENES TREES
+^^^^^^^^^^^^^^^^^^^^^^
+
+Removes TreeGenes trees from the public.ct_trees table. This function is used before the TREES RELOAD function.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/remove_treegenes_trees?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+TREES RELOAD
+^^^^^^^^^^^^
+
+Regenerates the views that contain tree information that are used by Cartograplant API.
+This function answers to the browser but performs multiple tasks in the background. Regenerating the trees can take several minutes or even hours to complete depending on the size of your tree database. Most of the tree_reload function performs nested SQL/Database manipulations and this is why the function can take so long - since multiple views and tables are dependent on each other. The following are generated in the order listed:
+
+* chado.new_geno_view
+
+* chado.plusgeno_view
+
+* chado.new_pheno_view
+
+* chado.ct_view
+
+* ct_trees_all_view
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/trees_reload?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+TREES RELOAD STATUS
+^^^^^^^^^^^^^^^^^^^
+
+Returns whether the TREE RELOAD function is currently regenerating the views. This can be used to determine if the task is ongoing/running or not running. You can reload this page multiple times to get the current status.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/reload_status?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+CACHE CLEAR
+^^^^^^^^^^^^
+
+Most SQL results are stored within the cache for usually 24 hours. Especially during development, this is not usually ideal - this is where the cache_clear function is useful. It clears all memory records and this assures you that the information you are retrieving from the Cartograplant UI is valid and fresh.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/clear?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+CONSOLIDATE DRYAD TREES FROM TREEGENES
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Converts TPPS submitted trees that are categorized as DRYAD studies into the correct database table ct_trees. It updates the source_id to 2 which is the DRYAD category. This must be done periodically and is usually called with a cron every 12 hours on production environments.
+This allows Cartograplant to properly display these trees as DRYAD trees. It also affects the DRYAD dataset filter.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/dryad/consolidate_dryad_trees_from_treegenes?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+CONSOLIDATE TREESNAP SUBKINGDOMS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TreeSnap trees are imported from the TREESNAP database (remotely). During the import, any trees with their subkingdom value as NULL in the ct_trees table is cross referenced 
+with the organismprop table in an attempt to retrieve a valid subkingdom and them updated. 
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/consolidate_subkingdoms?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+CONSOLIDATE TREESNAP FAMILIES
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TreeSnap trees /date are imported from the TREESNAP database (via the remote API). During the import, any trees with their family value as NULL in the ct_trees table is cross referenced 
+with the organismprop table in an attempt to retrieve a valid family and then updated. 
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/consolidate_families?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+RELOAD TREESNAP
+^^^^^^^^^^^^^^^
+
+TreeSnap trees / data are imported from the TREESNAP database (via the remote API). From time to time, when TreeSnap updates it's remote database, it is important for Cartograplant to pull the latest updates.
+This API function call will do this, continuing where it left off instead of reimporting the whole database.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/reload?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+FORCE RELOAD TREESNAP
+^^^^^^^^^^^^^^^^^^^^^
+
+TreeSnap trees / data are imported from the TREESNAP database (via the remote API). This is mostly used for major debugging. This function will pull the entire 
+TREESNAP database into Cartograplant.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/treesnap/force_reload?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+
+FORCE RELOAD BIENv4 TREES
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This function imports BIEN tree data from the publicly accessible BIENv4 database. This function uses unique TreeGenes genus groups and query the BIENv4's massive dataset for related trees. It does not import the entire BIENv4 dataset but rather a subset from the distinct genus groups from TreeGenes. 
+This data is imported into the public.ct_trees table with the source_id set as 3.
+
+Due to the size of this dataset (millions of records returned), nodejs may need more memory for this function to successfully complete.
+To avoid out of memory errors and incomplete imports, you can tweak NodeJS to run with a higher amount of memory (once available on server).
+Example command to do so (assigning 4 GB of memory to NodeJS): :code:`node --max-old-space-size=4096 Cartograplant_api.js`
+
+IMPORTANT: Like most force reload functions, this force reload function will delete all data from the table before importing data. Please remember this is resource intensive (NodeJS memory intensive) and also database server (IO writes and CPU) and can take a day or more to fully complete. It is not designed to be used on a daily basis for refreshing data.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/bienv4/trees/force_reload?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+FORCE RELOAD BIENv4 ENDANGERED TAXA
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This function imports BIEN endangered taxa data from the publicly accessible BIENv4 database. This function downloads the entire dataset into Cartograplant for display purposes.
+The data is imported into the public.ct_bien_endangered_taxa table. 
+
+IMPORTANT: Like most force reload functions, this force reload function will delete all data from the table before importing data.
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/bienv4/endangered_taxa/force_reload?asup=<password>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| asup                  | string               | API Super User Password                           |   
++-----------------------+----------------------+---------------------------------------------------+
+
+
+
+NORMAL USER API FUNCTIONS
+^^^^^^^^^^^^^^^^^^^^^^^^^
+The functions below only require the ?api_key= get variable in order to execute.
+
+GET TREES
+^^^^^^^^^
+
+Gets all the trees currently curated by TreeGenes and other sources
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees?api_key=<api_key>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [{"type":"Feature","properties":{"icon_type":1,"id":"ABAL0001"},"geometry":{"type":"Point","coordinates":[10.8377888,45.9715095]}},
+     {"type":"Feature","properties":{"icon_type":1,"id":"ABAL0002"},"geometry":{"type":"Point","coordinates":[10.8380944,45.9715108]}}
+     ...
+    ]
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+---------------------------------------+
+| Field                 | Type                 | Description                           |
++=======================+======================+=======================================+
+| icon_type             | integer              | The type of icon for the feature      |          
++-----------------------+----------------------+---------------------------------------+
+| id                    | string               | The id of the feature                 |          
++-----------------------+----------------------+---------------------------------------+
+| geometry.type         | string               | The type of geometry                  |          
++-----------------------+----------------------+---------------------------------------+
+| geometry.coordinates  | array of doubles     | Coordinates [long, lat]               |          
++-----------------------+----------------------+---------------------------------------+
+
+GET TREES BASED ON QUERY
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Gets all the trees based on the active datasets on the map and the filter created by the user
+
+Type of Request: POST
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/q?api_key=<api_key>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| query                 | object               | The query object derived from query builder       |          
++-----------------------+----------------------+---------------------------------------------------+
+| active_sources        | array of strings     | The active datasets on the map                    |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Sample parameters passed
+
+.. code-block:: JavaScript
+
+    {
+      "query": {
+        "condition": "AND",
+        "rules": [
+          {
+            "id": "family",
+            "field": "family",
+            "type": "string",
+            "input": "select",
+            "operator": "equal",
+            "value": "Anacardiaceae"
+          }
+        ]
+      },
+      "active_sources": [
+        "0",
+        "1",
+        "2"
+      ]
+    }
+
+Example POST request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/q?api_key=<api_key>', 
+        type: 'POST',
+        async: false,
+        contentType: 'application/json', 
+        data: JSON.stringify(jsonData),
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    {
+        "features": [
+            {
+              "type": "Feature",
+              "properties": {
+                "id": "TGDR045-161613",
+                "icon_type": 0
+              },
+              "geometry": {
+                "type": "point",
+                "coordinates": [
+                  -54.36032,
+                  -31.01048
+                ]
+              }
+            },
+            ...
+            {
+              "type": "Feature",
+              "properties": {
+                "id": "TGDR045-161614",
+                "icon_type": 0
+              },
+              "geometry": {
+                "type": "point",
+                "coordinates": [
+                  -54.35471,
+                  -31.01187
+                ]
+              }
+            },
+        ],
+        "center": [
+            -56.10413,
+            -30.2429
+        ],
+        "num_species": 1,
+        "num_pubs": 1,
+        "num_trees": 278
+    }
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| features              | array of objects     | A feature list of points                                 |          
++-----------------------+----------------------+----------------------------------------------------------+
+| center                | array of doubles     | The coordinate where most points are located             |          
++-----------------------+----------------------+----------------------------------------------------------+
+| num_species           | integer              | Number of species resulting from this query              |          
++-----------------------+----------------------+----------------------------------------------------------+
+| num_pubs              | integer              | Number of publications resulting from this query         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| num_trees             | integer              | Number of trees resulting from this query                |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+GET TREES BASED ON SOURCE
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Gets all the trees based on their dataset source
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/source?api_key=<api_key>&source_id=<source_id>`
+
+Query string parameters
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| source_id             | integer              | The id of the source dataset                      |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request
+-------------------
+
+:code:`https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/trees/source?api_key=<api_key>&source_id=1&source_id=2`
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [{"type":"Feature","properties":{"icon_type":1,"id":"ABAL0001"},"geometry":{"type":"Point","coordinates":[10.8377888,45.9715095]}},
+     {"type":"Feature","properties":{"icon_type":1,"id":"ABAL0002"},"geometry":{"type":"Point","coordinates":[10.8380944,45.9715108]}}
+     ...
+    ]
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+---------------------------------------+
+| Field                 | Type                 | Description                           |
++=======================+======================+=======================================+
+| icon_type             | integer              | The type of icon for the feature      |          
++-----------------------+----------------------+---------------------------------------+
+| id                    | string               | The id of the feature                 |          
++-----------------------+----------------------+---------------------------------------+
+| geometry.type         | string               | The type of geometry                  |          
++-----------------------+----------------------+---------------------------------------+
+| geometry.coordinates  | array of doubles     | Coordinates [long, lat]               |          
++-----------------------+----------------------+---------------------------------------+
+
+GET TREE BASIC INFORMATION
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Get the basic information of the tree
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/tree?api_key=<api_key>&tree_id=<tree_id>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| tree_id               | string               | The unique id of the individual tree              |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/tree?api_key=<api_key>&tree_id=ABAL0001', 
+        type: 'GET',
+        contentType: 'application/json', 
+        data: JSON.stringify(jsonData),
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    {
+        "uniquename":"ABAL0001",
+        "genus":"Abies",
+        "species":"Abies alba",
+        "subkingdom":"gymnosperm",
+        "family":"Pinaceae",
+        "latitude":45.9715095,
+        "longitude":10.8377888,
+        "coordinate_type":0,
+        "source_id":0,
+        "icon_type":1,
+        "tree_num":1
+    }
+
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| uniquename            | string               | The id of the tree                                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| genus                 | string               | The genus of the tree                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| species               | string               | The species of the tree                                  |          
++-----------------------+----------------------+----------------------------------------------------------+
+| subkingdom            | string               | The plant group the tree belongs to                      |          
++-----------------------+----------------------+----------------------------------------------------------+
+| family                | string               | The family of the tree                                   |          
++-----------------------+----------------------+----------------------------------------------------------+
+| latitude              | double               | The latitude coordinate of the tree                      |          
++-----------------------+----------------------+----------------------------------------------------------+
+| longitude             | double               | The longitude coordinate of the tree                     |          
++-----------------------+----------------------+----------------------------------------------------------+
+| coordinate_type       | integer              | The type of coordinate for the tree recorded             |          
++-----------------------+----------------------+----------------------------------------------------------+
+| source_id             | integer              | The dataset source that the tree originates from         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| icon_type             | integer              | The type of icon that represents the tree on the map     |          
++-----------------------+----------------------+----------------------------------------------------------+
+| tree_num              | integer              | The number of the tree                                   |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+
+GET TREE PHENOTYPES
+^^^^^^^^^^^^^^^^^^^
+
+Get the phenotype information of the tree
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/phenotypes?api_key=<api_key>&tree_id=<tree_id>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| tree_id               | string               | The unique id of the individual tree              |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/phenotypes?api_key=<api_key>&tree_id=TGDR069-190112', 
+        type: 'GET',
+        contentType: 'application/json', 
+        data: JSON.stringify(jsonData),
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+            "tree_acc":"TGDR069-190112",
+            "name":"flush",
+            "uniquename":"flush-190112",
+            "phenotype_name":"Budset scoring",
+            "value":"119.6",
+            "units":"days",
+            "po_name":" bud burst stage",
+            "po_accession":"PO:0025532",
+            "pato_name":"time",
+            "pato_accession":"PATO:0000165",
+            "cvterm_name":"Budset scoring",
+            "cvterm_accession":"CO_357:1000010"
+        }
+        ...
+    ]
+
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| tree_acc              | string               | The id of the tree                                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| name                  | string               | The name of the phenotype                                |          
++-----------------------+----------------------+----------------------------------------------------------+
+| uniquename            | string               | Uniquename of the phenotype assigned by chado            |          
++-----------------------+----------------------+----------------------------------------------------------+
+| phenotype_name        | string               | The phenotype name                                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| units                 | string               | The units of the value measured                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+| po_name               | string               | The plant ontology name of the tree                      |          
++-----------------------+----------------------+----------------------------------------------------------+
+| pato_name             | string               | Phenotype properties                                     |          
++-----------------------+----------------------+----------------------------------------------------------+
+| pato_accession        | string               | Accession of the pato                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| cvterm_name           | string               | Ontology term                                            |          
++-----------------------+----------------------+----------------------------------------------------------+
+| cvterm_accession      | string               | Ontology term accession                                  |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+GET TREE GENOTYPES
+^^^^^^^^^^^^^^^^^^^
+
+Get the genotype information of the tree
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/genotypes?api_key=<api_key>&tree_id=<tree_id>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| tree_id               | string               | The unique id of the individual tree              |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/genotypes?api_key=<api_key>&tree_id=TGDR069-190112', 
+        type: 'GET',
+        contentType: 'application/json', 
+        data: JSON.stringify(jsonData),
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+            "tree_acc": "TGDR001-7014"
+            "uniquename": "SNP-PTRI.339.C1-162-Potr-A:A"
+            "marker_name": "-"
+            "description": "A:A"
+            "marker_type": "SNP"
+            "study_type": "Natural Population (Landscape)"
+        }
+        ...
+    ]
+
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| tree_acc              | string               | The id of the tree                                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| uniquename            | string               | Uniquename of the phenotype assigned by chado            |          
++-----------------------+----------------------+----------------------------------------------------------+
+| marker_name           | string               | The marker name                                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+| description           | string               | The description                                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+| study_type            | string               | The study type                                           |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+
+
+GET TREE MARKERS    
+^^^^^^^^^^^^^^^^^^
+
+Get the marker types and additional genotype information associated with the tree
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/markertypes?api_key=<api_key>&tree_id=<tree_id>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |          
++-----------------------+----------------------+---------------------------------------------------+
+| tree_id               | String               | The unique id of the individual tree              |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/markertypes?api_key=<api_key>&tree_id=TGDR006-14454', 
+        type: 'GET',
+        contentType: 'application/json', 
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+            "tree_acc":"TGDR006-14454",
+            "marker_name":"0_10207_01_333-Pita",
+            "description":"C:C",
+            "marker_type":"SNP",
+            "study_type":"GxP",
+            "quality_score":null,
+            "marker_technology":"array",
+            "assembly_type":null,
+            "scaffold":null,
+            "position":null,
+            "original_name":null
+        }
+        ...
+    ]
+
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| tree_acc              | string               | The id of the tree                                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| marker_name           | string               | The name of the marker                                   |          
++-----------------------+----------------------+----------------------------------------------------------+
+| description           | string               | The description of the genotype                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+| marker_type           | string               | The type of the marker                                   |          
++-----------------------+----------------------+----------------------------------------------------------+
+| study_type            | string               | The type of the study                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| quality_score         | unknown              | The quality score                                        |          
++-----------------------+----------------------+----------------------------------------------------------+
+| marker_technology     | string               | The technology of the marker                             |          
++-----------------------+----------------------+----------------------------------------------------------+
+| assembly_type         | unkown               | The assembly type                                        |          
++-----------------------+----------------------+----------------------------------------------------------+
+| scaffold              | unknown              | The scaffold of the genotype                             |          
++-----------------------+----------------------+----------------------------------------------------------+
+| position              | unknown              | The position of the genotype                             |          
++-----------------------+----------------------+----------------------------------------------------------+
+| original name         | unknown              | The original name of the genotype                        |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+GET TREE PUBLICATIONS
+^^^^^^^^^^^^^^^^^^^^^
+
+
+Get the publication information for a tree if it has a publication associated with it
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/publications?api_key=<api_key>&tree_acc=<tree_acc>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| tree_acc              | String               | Study accession of a tree                         |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/publications?api_key=<api_key>&tree_acc=TGDR002', 
+        type: 'GET',
+        contentType: 'application/json', 
+        success: function(result){ ... },
+        error: ...
+    });
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+            "project_id":"45",
+            "accession":"TGDR002",
+            "pub_id":"21371",
+            "title":"Astonishingly low genetic variation in Quercus acutissima, an important tree species in Satoyama, a traditional Japanese rural forest and agricultural landscape, revealed by chloroplast microsatellite markers",
+            "author":"Tsuda, Yoshiaki",
+            "species":"Quercus acutissima",
+            "tree_count":"2152",
+            "phen_count":null,
+            "ontology_ids":null,
+            "phenotypes_assessed":null,
+            "gen_count":"12912",
+            "markers":"cpSSR",
+            "study_type":"G",
+            "volumetitle":null,
+            "volume":"",
+            "series_name":"Tree Genetics & Genomes",
+            "issue":"","pyear":"2012",
+            "pages":"-",
+            "miniref":null,
+            "uniquename":"Saito, Yoko, Tsuda, Yoshiaki , Uchiyama, Kentaro , Fukuda, Tomohide , Seto, Yasuhiro , Kim, Pangi , Ide, Yuji Astonishingly low genetic variation in Quercus acutissima, an important tree species in Satoyama, a traditional Japanese rural forest and agricultural landscape, revealed by chloroplast microsatellite markers 2012; () -",
+            "type_id":"229",
+            "is_obsolete":false,
+            "publisher":null,
+            "pubplace":null
+        }
+    ]
+
+Response Fields
+---------------
+
++-----------------------+----------------------+----------------------------------------------------------+
+| Field                 | Type                 | Description                                              |
++=======================+======================+==========================================================+
+| project_id            | integer              | The id of the project                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| accession             | string               | The accession of the publication                         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| pub_id                | integer              | The id of the publication                                |          
++-----------------------+----------------------+----------------------------------------------------------+
+| title                 | string               | The title of this study                                  |          
++-----------------------+----------------------+----------------------------------------------------------+
+| author                | string               | The primary author fo this study                         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| species               | string               | The species focused on by this study                     |          
++-----------------------+----------------------+----------------------------------------------------------+
+| tree_count            | integer              | Number of trees assessed by this study                   |          
++-----------------------+----------------------+----------------------------------------------------------+
+| phen_count            | intger               | Number of phenotypes for this study                      |          
++-----------------------+----------------------+----------------------------------------------------------+
+| ontology_ids          | string               | The ids of the associated ontologies                     |          
++-----------------------+----------------------+----------------------------------------------------------+
+| phenotypes_assessed   | integer              | The phenotypes assessed                                  |          
++-----------------------+----------------------+----------------------------------------------------------+
+| gen_count             | integer              | Number of genotypes for this study                       |          
++-----------------------+----------------------+----------------------------------------------------------+
+| markers               | string               | Markers recorded for the species of this study           |          
++-----------------------+----------------------+----------------------------------------------------------+
+| study_type            | string               | The type of the study                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| volumetitle           | string               | Title of volume where this study was published           |          
++-----------------------+----------------------+----------------------------------------------------------+
+| volume                | string               | The volume of the paper published                        |          
++-----------------------+----------------------+----------------------------------------------------------+
+| series_name           | string               | The series of the published paper                        |          
++-----------------------+----------------------+----------------------------------------------------------+
+| issue                 | string               | The issue of the published paper                         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| pages                 | string               | The pages of the published paper                         |          
++-----------------------+----------------------+----------------------------------------------------------+
+| miniref               | string               | The mini reference to the paper                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+| uniquename            | string               | The uniquename of the paper                              |          
++-----------------------+----------------------+----------------------------------------------------------+
+| type_id               | integer              | The type_id of the paper                                 |          
++-----------------------+----------------------+----------------------------------------------------------+
+| is_obselete           | boolean              | Is the paper obselete                                    |          
++-----------------------+----------------------+----------------------------------------------------------+
+| publisher             | string               | The publisher of the paper                               |          
++-----------------------+----------------------+----------------------------------------------------------+
+| pubplace              | string               | The place??? of the publication                          |          
++-----------------------+----------------------+----------------------------------------------------------+
+
+
+
+GET TREE TREESNAP COMPLETE
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TreeSnap trees are accessed through the TreeSnap API provided by https://treesnap.org
+Please visit the site, download their app and submit your own trees if you want to contribute both to TreeSnap and Cartograplant
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/treesnap?api_key=<api_key>&tree_id=<tree_id>`
+
+Query string parameters:
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |          
++-----------------------+----------------------+---------------------------------------------------+
+| tree_id               | string               | The unique id of a treesnap tree                  |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example GET request using ajax
+-------------------------------
+
+.. code-block:: JavaScript
+
+    $.ajax({ 
+        url: 'https://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/treesnap?api_key=<api_key>&tree_id=treesnap.1', 
+        type: 'GET',
+        contentType: 'application/json', 
+        success: function(result){ ... },
+        error: ...
+    });
+
+The response will be the same as accessing the TreeSnap API directly for individual trees.
+To see the full documentation for TreeSnap's API please go to: 
+https://github.com/statonlab/Treesnap-website/wiki/Public-API-Documentation
+
+
+GET SESSION DATA
+^^^^^^^^^^^^^^^^^^^^^^
+
+Gets saved session state properties
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/session?api_key=<api_key>&session_id=<session_id>`
+
+Query string parameters
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |   
++-----------------------+----------------------+---------------------------------------------------+
+| session_id            | string               | The id of the session                             |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    {
+        "layers":null,
+        "filters":null,
+        "zoom":null,
+        "pitch":null,
+        "bearing":null,
+        "center":null,
+        "excluded_trees":null,
+        "session_id":<session_id>
+    }
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+---------------------------------------+
+| Field                 | Type                 | Description                           |
++=======================+======================+=======================================+
+| api_key               | string               | Your API key                          |   
++-----------------------+----------------------+---------------------------------------+
+| session_id            | string               | The session id                        |          
++-----------------------+----------------------+---------------------------------------+
+| layers                | object               | The layers activated in this session  |          
++-----------------------+----------------------+---------------------------------------+
+| filters               | object               | The filters and active datasets       | 
++-----------------------+----------------------+---------------------------------------+
+| excluded_trees        | array                | Trees excluded for analysis           | 
++-----------------------+----------------------+---------------------------------------+
+| zoom                  | double               | Map zoom property                     |          
++-----------------------+----------------------+---------------------------------------+
+| pitch                 | double               | Map pitch proterty                    |          
++-----------------------+----------------------+---------------------------------------+
+| bearing               | double               | Map bearing property                  |          
++-----------------------+----------------------+---------------------------------------+
+| center                | array of doubles     | Center of map [long, lat]             |          
++-----------------------+----------------------+---------------------------------------+
+
+GET USER SESSION
+^^^^^^^^^^^^^^^^^^^^^^
+
+Gets session information for a saved session by the user
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/session/by-user?api_key=<api_key>&user_id=<user_id>&session_id=<session_id>`
+
+Query string parameters
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |          
++-----------------------+----------------------+---------------------------------------------------+
+| user_id               | integer              | The id of user created by drupal                  |          
++-----------------------+----------------------+---------------------------------------------------+
+| session_id            | string               | The id of the session of the user                 |          
++-----------------------+----------------------+---------------------------------------------------+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+        "user_id":"186",
+        "title":"ok",
+        "comments":"",
+        "session_id":"0b6d71c1324b3bfc68732caaa9315c27"}
+    ]
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+---------------------------------------+
+| Field                 | Type                 | Description                           |
++=======================+======================+=======================================+
+| title                 | string               | The title of the session              |          
++-----------------------+----------------------+---------------------------------------+
+| comments              | string               | The comments by the user              |          
++-----------------------+----------------------+---------------------------------------+
+| user_id               | integer              | The id of the user                    |          
++-----------------------+----------------------+---------------------------------------+
+| session_id            | string               | The session id                        |          
++-----------------------+----------------------+---------------------------------------+
+
+GET ALL USER SESSIONS
+^^^^^^^^^^^^^^^^^^^^^^
+
+Gets all the saved sessions by a user along with the saved session state properties
+
+Type of Request: GET
+
+URL: :code:`http://tgwebdev.cam.uchc.edu/Cartograplant/api/v2/user/sessions/by-user/all?api_key=<api_key>&user_id=<user_id>`
+
+Query string parameters
+
++-----------------------+----------------------+---------------------------------------------------+
+| Name                  | Type                 | Description                                       |
++=======================+======================+===================================================+
+| api_key               | string               | Your API key                                      |          
++-----------------------+----------------------+---------------------------------------------------+
+| user_id               | integer              | The id of user created by drupal                  |          
++-----------------------+----------------------+---------------------------------------------------+
+
+
+Example Response
+----------------
+
+.. code-block:: JavaScript
+
+    [
+        {
+        "title":"t2",
+        "comments":"",
+        "session_id":<session_id>,
+        "layers":{},
+        "filters":{
+            "query":{
+                "condition":"OR",
+                "rules":[
+                    {
+                    "id":"genus",
+                    "field":"genus",
+                    "type":"string",
+                    "input":"select",
+                    "operator":"equal",
+                    "value":"Abies"}
+                ]
+            },
+            "active_sources":["0","1","2"]
+        },
+        "zoom":4,
+        "pitch":0,
+        "bearing":0,
+        "center":{"lng":24.851,"lat":41.922},
+        "created_at":"2019-07-01T19:08:32.010Z","excluded_trees":{}
+        }
+        ...
+    ]
+    
+Response Fields
+---------------
+
++-----------------------+----------------------+---------------------------------------+
+| Field                 | Type                 | Description                           |
++=======================+======================+=======================================+
+| title                 | string               | The title of the session              |          
++-----------------------+----------------------+---------------------------------------+
+| comments              | string               | The comments of the session           |          
++-----------------------+----------------------+---------------------------------------+
+| session_id            | string               | The session id                        |          
++-----------------------+----------------------+---------------------------------------+
+| layers                | object               | The layers activated in this session  |          
++-----------------------+----------------------+---------------------------------------+
+| filters               | object               | The filters and active datasets       |          
++-----------------------+----------------------+---------------------------------------+
+| zoom                  | double               | Map zoom property                     |          
++-----------------------+----------------------+---------------------------------------+
+| pitch                 | double               | Map pitch proterty                    |          
++-----------------------+----------------------+---------------------------------------+
+| bearing               | double               | Map bearing property                  |          
++-----------------------+----------------------+---------------------------------------+
+| center                | array of doubles     | Center of map [long, lat]             |          
++-----------------------+----------------------+---------------------------------------+
+| created_at            | datetime             | Date the session was saved            |          
++-----------------------+----------------------+---------------------------------------+
