@@ -221,7 +221,7 @@ In the **Select environmental metrics** tab, you can:
 In the **Conduct analysis** tab, provide a vcf and/or environmental file(s) generated from the **Select environmental metrics** tab or **Select Traits** tab to perform either genotype-phenotype or genotype-environment association analysis. Users can conduct genotype-phenotype analysis with two models from the `GEMMA software: <https://github.com/genetics-statistics/GEMMA>`_  a linear model, or a univariate linear mixed model. Users can conduct genotype-environment analysis using latent factor mixed models (LFMM) from the `LEA R package <https://www.bioconductor.org/packages/devel/bioc/vignettes/LEA/inst/doc/LEA.pdf>`_.” 
     
 
-.. figure:: _static/NATC-gemmalm.png
+.. figure:: _static/DH_GWAS_WZA.png
    :alt: GEMMA Linear Model
    :width: 600px
    :align: center
