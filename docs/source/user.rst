@@ -161,7 +161,7 @@ Running an Analysis
 
 In the **Select studies** tab you can select and unselect certain studies for further analysis based on sample size and contains genotype and/or phenotype data..
 
-Once done selecting studies click **Apply selections** to this analysis session to standardize the studies for merging.
+Once done, selected studies will authomatically be added to this analysis session to standardize the studies for merging.
 
 .. raw:: html
 
@@ -174,17 +174,14 @@ Once done selecting studies click **Apply selections** to this analysis session 
 In the **Filter traits** tab: you can select any traits that were phenotyped using the selected samples. This will create a file for each phenotype within the user workspace.
 
 
-In the **Select genotypes** tab, you can select the set of markers that are common or unique to specific samples across selected studies.
+In the **Select genotypes** tab, you can select the set of markers that are common or unique to specific samples across selected studies. You can also select a genome version to remap SNPs to when merging selected studies.
 
 
-In the **Filter markers & genotypes** panel, you can: 
-   
-   - select statistics to visualize
-   - apply combinations of filtering thresholds
+In the **Filter markers & genotypes** panel, you can select statistics to visualize and apply combinations of filtering thresholds
    - Specifically, users can filter the combined genotypic data based on 1) the fraction of missing genotypes at a locus, 2) the frequency of the second-most common allele (e.g., the minor allele in SNP data), 3) p-value threshold for Hardy Weinberg equilibrium tests, 4) excess heterozygosity, and 5) the fraction of missing data at the individual level
 
-.. figure:: _static/NATC-variantFiltering.png
-   :alt: GEMMA Linear Model
+.. figure:: _static/DH_Filter.png
+   :alt: Filtering Parameters
    :width: 600px
    :align: center
 
